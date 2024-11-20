@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set SPWM settings
     simulator.setSPWMMode('fixed'); // 'fixed' or 'ramp'
     simulator.setCarrierFrequency(1000); // Carrier frequency in Hz
-    simulator.setCommandFrequency(50); // Command frequency in Hz
 
     const buttons = {
         p3: document.getElementById('p3'),

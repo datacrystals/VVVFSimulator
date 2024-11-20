@@ -12,7 +12,7 @@ body {
     align-items: center;
 }
 
-.speed-display, .frequency-display {
+.speed-display {
     font-size: 24px;
     margin-bottom: 20px;
 }
