@@ -38,6 +38,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     controls.setNeutral();
-    simulator.update();
+
+    // Initialize or resume the AudioContext after a user gesture (click or keypress)
+    const initializeAudio = async () => {
+        await simulator.audioPlayer.initializeAudioContext();
+        simulator.update();
+        // Remove the event listeners after initialization
+        document.removeEventListener('click', initializeAudio);
+        document.removeEventListener('keypress', initializeAudio);
+    };
+
+    document.addEventListener('click', initializeAudio, { once: true });
+    document.addEventListener('keypress', initializeAudio, { once: true });
 });
-    

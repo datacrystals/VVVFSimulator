@@ -1,25 +1,36 @@
 import OscilloscopeDisplay from './display.js';
-import SoundGenerator from './generator.js';
+import AudioPlayer from './audioPlayer.js';
 
 class TrainSimulator {
     constructor(speedDisplay, canvas, ctx) {
         this.speedDisplay = speedDisplay;
         this.canvas = canvas;
         this.ctx = ctx;
-        this.trainSpeed = 0;
+        this.trainSpeed = 0; // Start at 0 km/h
         this.soundData = [];
         this.powerLevel = 0;
         this.brakingLevel = 0;
         this.spwmConfig = [];
         this.oscilloscope = new OscilloscopeDisplay(canvas, ctx);
-        this.soundGenerator = null;
+        this.audioPlayer = new AudioPlayer();
+        this.soundWorker = new Worker(new URL('./soundWorker.js', import.meta.url));
+
+        this.soundWorker.onmessage = (e) => {
+            const { type, data } = e.data;
+            if (type === 'soundData') {
+                this.soundData = data;
+                this.audioPlayer.updateSound(this.soundData).catch(error => {
+                    console.error('Error updating sound:', error);
+                });
+            }
+        };
     }
 
     async loadConfig(configPath) {
         const response = await fetch(configPath);
         const config = await response.json();
         this.spwmConfig = config.speedRanges;
-        this.soundGenerator = new SoundGenerator(this.spwmConfig);
+        this.soundWorker.postMessage({ type: 'init', data: this.spwmConfig });
     }
 
     updateSpeed() {
@@ -33,7 +44,7 @@ class TrainSimulator {
     }
 
     generateSoundData() {
-        this.soundData = this.soundGenerator.generateSoundData(this.trainSpeed, this.canvas.width);
+        this.soundWorker.postMessage({ type: 'generateSoundData', data: { speed: this.trainSpeed, canvasWidth: this.canvas.width } });
     }
 
     update() {

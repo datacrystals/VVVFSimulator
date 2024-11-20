@@ -19,18 +19,16 @@ class SoundGenerator {
     }
 
     generateSoundData(speed, canvasWidth) {
-        const soundData = [];
-        const commandFrequency = this.getCommandFrequencyForSpeed(speed);
-        const settings = this.getSettingsForSpeed(speed);
+        const soundData = new Float32Array(canvasWidth);
 
-        for (let i = 0; i < canvasWidth; i++) {
-            soundData.push(this.generateSample(i, commandFrequency, settings, speed));
+        // Check if the speed is below the minimum speed
+        if (speed < this.config[0].minSpeed) {
+            // Generate a flat signal (all zeros)
+            return soundData;
         }
 
-        return soundData;
-    }
-
-    generateSample(i, commandFrequency, settings, speed) {
+        const commandFrequency = this.getCommandFrequencyForSpeed(speed);
+        const settings = this.getSettingsForSpeed(speed);
         const carrierAmplitude = 1;
         const commandAmplitude = 1;
         let carrierFrequency;
@@ -42,20 +40,28 @@ class SoundGenerator {
             carrierFrequency = settings.spwm.minCarrierFrequency + (settings.spwm.maxCarrierFrequency - settings.spwm.minCarrierFrequency) * ratio;
         }
 
-        const carrier = (i * 0.05 * carrierFrequency / 1000) % 1; // Sawtooth wave
-        const command = Math.sin(i * 0.01 * commandFrequency / 1000 * 2 * Math.PI);
+        const carrierFactor = 0.05 * carrierFrequency / 1000;
+        const commandFactor = 0.01 * commandFrequency / 1000 * 2 * Math.PI;
 
-        let output;
-        if (command > 0 && command > carrier) {
-            output = commandAmplitude;
-        } else if (command < 0 && command < -carrier) {
-            output = -commandAmplitude;
-        } else {
-            output = 0;
+        for (let i = 0; i < canvasWidth; i++) {
+            const carrier = (i * carrierFactor) % 1; // Sawtooth wave
+            const command = Math.sin(i * commandFactor);
+
+            let output;
+            if (command > 0 && command > carrier) {
+                output = commandAmplitude;
+            } else if (command < 0 && command < -carrier) {
+                output = -commandAmplitude;
+            } else {
+                output = 0;
+            }
+
+            soundData[i] = output * 100;
         }
 
-        return output * 100;
+        return soundData;
     }
 }
 
-export default SoundGenerator;
+// Expose the SoundGenerator class globally
+self.SoundGenerator = SoundGenerator;

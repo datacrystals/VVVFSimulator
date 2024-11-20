@@ -1,46 +1,46 @@
 {
     "speedRanges": [
         {
-            "minSpeed": 0,
-            "maxSpeed": 5,
-            "spwm": {
-                "type": "fixed",
-                "carrierFrequency": 300
-            }
-        },
-        {
-            "minSpeed": 5,
+            "minSpeed": 1,
             "maxSpeed": 10,
             "spwm": {
                 "type": "fixed",
-                "carrierFrequency": 500
+                "carrierFrequency": 100
             }
         },
         {
             "minSpeed": 10,
-            "maxSpeed": 50,
+            "maxSpeed": 25,
             "spwm": {
-                "type": "ramp",
-                "minCarrierFrequency": 500,
-                "maxCarrierFrequency": 900
+                "type": "fixed",
+                "carrierFrequency": 200
             }
         },
         {
-            "minSpeed": 50,
-            "maxSpeed": 100,
+            "minSpeed": 25,
+            "maxSpeed": 75,
             "spwm": {
                 "type": "ramp",
-                "minCarrierFrequency": 600,
-                "maxCarrierFrequency": 2000
+                "minCarrierFrequency": 250,
+                "maxCarrierFrequency": 400
             }
         },
         {
-            "minSpeed": 100,
+            "minSpeed": 75,
+            "maxSpeed": 125,
+            "spwm": {
+                "type": "ramp",
+                "minCarrierFrequency": 275,
+                "maxCarrierFrequency": 425
+            }
+        },
+        {
+            "minSpeed": 125,
             "maxSpeed": 201,
             "spwm": {
                 "type": "ramp",
-                "minCarrierFrequency": 2000,
-                "maxCarrierFrequency": 500
+                "minCarrierFrequency": 300,
+                "maxCarrierFrequency": 450
             }
         }
     ]
