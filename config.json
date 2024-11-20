@@ -5,7 +5,7 @@
             "maxSpeed": 10,
             "spwm": {
                 "type": "fixed",
-                "carrierFrequency": 100
+                "carrierFrequency": 300
             }
         },
         {
@@ -13,7 +13,7 @@
             "maxSpeed": 25,
             "spwm": {
                 "type": "fixed",
-                "carrierFrequency": 200
+                "carrierFrequency": 600
             }
         },
         {
@@ -21,8 +21,8 @@
             "maxSpeed": 75,
             "spwm": {
                 "type": "ramp",
-                "minCarrierFrequency": 250,
-                "maxCarrierFrequency": 400
+                "minCarrierFrequency": 800,
+                "maxCarrierFrequency": 1200
             }
         },
         {
@@ -30,8 +30,8 @@
             "maxSpeed": 125,
             "spwm": {
                 "type": "ramp",
-                "minCarrierFrequency": 275,
-                "maxCarrierFrequency": 425
+                "minCarrierFrequency": 1000,
+                "maxCarrierFrequency": 2000
             }
         },
         {
@@ -39,8 +39,8 @@
             "maxSpeed": 201,
             "spwm": {
                 "type": "ramp",
-                "minCarrierFrequency": 300,
-                "maxCarrierFrequency": 450
+                "minCarrierFrequency": 1100,
+                "maxCarrierFrequency": 2200
             }
         }
     ]

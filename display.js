@@ -4,13 +4,13 @@ class OscilloscopeDisplay {
         this.ctx = ctx;
     }
 
-    drawGrid() {
+    drawGrid(sampleRate) {
         const ctx = this.ctx;
         const canvas = this.canvas;
         const width = canvas.width;
         const height = canvas.height;
         const gridSize = 100; // Size of each grid square
-        const timeInterval = 100; // Time interval in microseconds
+        const timeInterval = (width / gridSize) / sampleRate * 1e6; // Time interval in microseconds
 
         ctx.strokeStyle = '#555';
         ctx.lineWidth = 1;
@@ -48,17 +48,28 @@ class OscilloscopeDisplay {
         }
     }
 
-    drawOscilloscope(soundData) {
+    drawOscilloscope(soundData, sampleRate) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawGrid();
+        this.drawGrid(sampleRate);
         this.ctx.beginPath();
         this.ctx.moveTo(0, this.canvas.height / 2);
+    
+        const width = this.canvas.width;
+        const scaleFactor = width / soundData.length; // Scale factor based on canvas width and number of samples
+    
         for (let i = 0; i < soundData.length; i++) {
-            this.ctx.lineTo(i, this.canvas.height / 2 - soundData[i]);
+            const x = i * scaleFactor; // Scale the x position
+            const y = this.canvas.height / 2 - soundData[i]; // Keep the y position as is
+            this.ctx.lineTo(x, y);
         }
+    
         this.ctx.strokeStyle = '#00ff00';
         this.ctx.stroke();
     }
+    
+    
+    
+    
 }
 
 export default OscilloscopeDisplay;

@@ -11,9 +11,11 @@ class TrainSimulator {
         this.powerLevel = 0;
         this.brakingLevel = 0;
         this.spwmConfig = [];
+        this.sampleRate = 100; // standard audio sample rate, in samples/sec
         this.oscilloscope = new OscilloscopeDisplay(canvas, ctx);
         this.audioPlayer = new AudioPlayer();
         this.soundWorker = new Worker(new URL('./soundWorker.js', import.meta.url));
+        this.startTime = performance.now(); // Initialize start time
 
         this.soundWorker.onmessage = (e) => {
             const { type, data } = e.data;
@@ -44,13 +46,14 @@ class TrainSimulator {
     }
 
     generateSoundData() {
-        this.soundWorker.postMessage({ type: 'generateSoundData', data: { speed: this.trainSpeed, canvasWidth: this.canvas.width } });
+        const globalTime = (performance.now() - this.startTime) / 1000; // Calculate global time in seconds
+        this.soundWorker.postMessage({ type: 'generateSoundData', data: { speed: this.trainSpeed, canvasWidth: this.canvas.width, globalTime, sampleRate: this.sampleRate } });
     }
 
     update() {
         this.updateSpeed();
         this.generateSoundData();
-        this.oscilloscope.drawOscilloscope(this.soundData);
+        this.oscilloscope.drawOscilloscope(this.soundData, this.sampleRate);
         requestAnimationFrame(() => this.update());
     }
 

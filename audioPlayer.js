@@ -3,9 +3,9 @@ class AudioPlayer {
         this.audioContext = null;
         this.audioBuffer = null;
         this.sourceNode = null;
-        this.bufferSize = 4096; // Increase the buffer size
+        this.bufferSize = 1024; // Increase the buffer size
         this.audioBufferQueue = [];
-        this.maxQueueSize = 5; // Maximum number of buffers in the queue
+        this.maxQueueSize = 3; // Maximum number of buffers in the queue
     }
 
     async initializeAudioContext() {

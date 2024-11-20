@@ -9,8 +9,8 @@ onmessage = function(e) {
         spwmConfig = data;
         soundGenerator = new SoundGenerator(spwmConfig);
     } else if (type === 'generateSoundData') {
-        const { speed, canvasWidth } = data;
-        const soundData = soundGenerator.generateSoundData(speed, canvasWidth);
+        const { speed, canvasWidth, globalTime, sampleRate } = data;
+        const soundData = soundGenerator.generateSoundData(speed, canvasWidth, globalTime, sampleRate);
         postMessage({ type: 'soundData', data: soundData });
     }
 };
