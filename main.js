@@ -40,3 +40,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     controls.setNeutral();
     simulator.update();
 });
+    
