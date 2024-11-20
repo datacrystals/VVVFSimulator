@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Sound Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Train Sound Simulator</h1>
+        <div class="speed-display">
+            <label for="speed">Train Speed:</label>
+            <span id="speed">0</span> km/h
+        </div>
+        <div class="controls">
+            <div class="buttons-column">
+                <button id="p3" onclick="setPower(3)">P3</button>
+                <button id="p2" onclick="setPower(2)">P2</button>
+                <button id="p1" onclick="setPower(1)">P1</button>
+                <button id="n" onclick="setNeutral()">N</button>
+                <button id="b1" onclick="setBraking(1)">B1</button>
+                <button id="b2" onclick="setBraking(2)">B2</button>
+                <button id="b3" onclick="setBraking(3)">B3</button>
+                <button id="b4" onclick="setBraking(4)">B4</button>
+                <button id="b5" onclick="setBraking(5)">B5</button>
+            </div>
+            <canvas id="oscilloscope" width="600" height="400"></canvas>
+        </div>
+    </div>
+    <script src="main.js" type="module"></script>
+</body>
+</html>
