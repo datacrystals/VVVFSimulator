@@ -1,0 +1,38 @@
+{
+    "speedRanges": [
+        {
+            "minSpeed": 0,
+            "maxSpeed": 5,
+            "spwm": {
+                "type": "fixed",
+                "carrierFrequency": 300
+            }
+        },
+        {
+            "minSpeed": 5,
+            "maxSpeed": 10,
+            "spwm": {
+                "type": "fixed",
+                "carrierFrequency": 500
+            }
+        },
+        {
+            "minSpeed": 10,
+            "maxSpeed": 50,
+            "spwm": {
+                "type": "ramp",
+                "minCarrierFrequency": 500,
+                "maxCarrierFrequency": 900
+            }
+        },
+        {
+            "minSpeed": 50,
+            "maxSpeed": 201,
+            "spwm": {
+                "type": "ramp",
+                "minCarrierFrequency": 600,
+                "maxCarrierFrequency": 2000
+            }
+        }
+    ]
+}

@@ -7,21 +7,13 @@ class TrainSimulator {
         this.soundData = [];
         this.powerLevel = 0;
         this.brakingLevel = 0;
-        this.toneRanges = [];
-        this.spwmMode = 'fixed'; // 'fixed' or 'ramp'
-        this.carrierFrequency = 1000; // Carrier frequency in Hz
+        this.spwmConfig = [];
     }
 
-    setToneRanges(ranges) {
-        this.toneRanges = ranges;
-    }
-
-    setSPWMMode(mode) {
-        this.spwmMode = mode;
-    }
-
-    setCarrierFrequency(frequency) {
-        this.carrierFrequency = frequency;
+    async loadConfig(configPath) {
+        const response = await fetch(configPath);
+        const config = await response.json();
+        this.spwmConfig = config.speedRanges;
     }
 
     updateSpeed() {
@@ -37,8 +29,9 @@ class TrainSimulator {
     generateSoundData() {
         this.soundData = [];
         let commandFrequency = this.getCommandFrequencyForSpeed(this.trainSpeed);
+        const spwmSettings = this.getSPWMSettingsForSpeed(this.trainSpeed);
         for (let i = 0; i < this.canvas.width; i++) {
-            this.soundData.push(this.spwm(i, commandFrequency));
+            this.soundData.push(this.spwm(i, commandFrequency, spwmSettings));
         }
     }
 
@@ -48,27 +41,25 @@ class TrainSimulator {
         return 10 + (speed / 200) * 90;
     }
 
-    getToneForSpeed(speed) {
-        for (const range of this.toneRanges) {
+    getSPWMSettingsForSpeed(speed) {
+        for (const range of this.spwmConfig) {
             if (speed >= range.minSpeed && speed < range.maxSpeed) {
-                if (range.type === 'tone') {
-                    return range.tone;
-                } else if (range.type === 'rampTone') {
-                    const ratio = (speed - range.minSpeed) / (range.maxSpeed - range.minSpeed);
-                    return range.minTone + (range.maxTone - range.minTone) * ratio;
-                }
+                return range;
             }
         }
-        return 0; // Default tone if no range matches
+        return null; // Default settings if no range matches
     }
 
-    spwm(i, commandFrequency) {
+    spwm(i, commandFrequency, spwmSettings) {
         const carrierAmplitude = 1;
         const commandAmplitude = 1;
-        let carrierFrequency = this.carrierFrequency;
+        let carrierFrequency;
 
-        if (this.spwmMode === 'ramp') {
-            carrierFrequency = commandFrequency * 2; // Synchronous mode
+        if (spwmSettings.spwm.type === 'fixed') {
+            carrierFrequency = spwmSettings.spwm.carrierFrequency;
+        } else if (spwmSettings.spwm.type === 'ramp') {
+            const ratio = (this.trainSpeed - spwmSettings.minSpeed) / (spwmSettings.maxSpeed - spwmSettings.minSpeed);
+            carrierFrequency = spwmSettings.spwm.minCarrierFrequency + (spwmSettings.spwm.maxCarrierFrequency - spwmSettings.spwm.minCarrierFrequency) * ratio;
         }
 
         const carrier = (i * 0.05 * carrierFrequency / 1000) % 1; // Sawtooth wave
@@ -83,7 +74,6 @@ class TrainSimulator {
             output = 0;
         }
 
-
         return output * 100;
     }
 
@@ -94,10 +84,10 @@ class TrainSimulator {
         const height = canvas.height;
         const gridSize = 100; // Size of each grid square
         const timeInterval = 100; // Time interval in microseconds
-    
+
         ctx.strokeStyle = '#555';
         ctx.lineWidth = 1;
-    
+
         // Draw vertical grid lines
         for (let x = 0; x <= width; x += gridSize) {
             ctx.beginPath();
@@ -105,7 +95,7 @@ class TrainSimulator {
             ctx.lineTo(x, height);
             ctx.stroke();
         }
-    
+
         // Draw horizontal grid lines
         for (let y = 0; y <= height; y += gridSize) {
             ctx.beginPath();
@@ -113,7 +103,7 @@ class TrainSimulator {
             ctx.lineTo(width, y);
             ctx.stroke();
         }
-    
+
         // Draw x-axis labels in microseconds
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'center';
@@ -122,7 +112,7 @@ class TrainSimulator {
             const time = (x / width) * (width / gridSize) * timeInterval;
             ctx.fillText(time.toFixed(0) + ' µs', x, height - 10);
         }
-    
+
         // Draw y-axis labels
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
@@ -130,7 +120,7 @@ class TrainSimulator {
             ctx.fillText((height / 2 - y).toString(), width - 10, y);
         }
     }
-    
+
     drawOscilloscope() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawGrid();
@@ -142,7 +132,6 @@ class TrainSimulator {
         this.ctx.strokeStyle = '#00ff00';
         this.ctx.stroke();
     }
-     
 
     update() {
         this.updateSpeed();
