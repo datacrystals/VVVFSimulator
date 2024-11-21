@@ -18,13 +18,13 @@ class SoundGenerator {
         return null; // Default settings if no range matches
     }
 
-    generateSoundData(speed, numSamples, globalTime, sampleRate=44100) {
-        const soundData = new Float32Array(numSamples);
-    
+    generateSoundData(speed, soundData, commandData, globalTime, sampleRate = 44100) {
         // Check if the speed is below the minimum speed
         if (speed < this.config[0].minSpeed) {
             // Generate a flat signal (all zeros)
-            return soundData;
+            soundData.fill(0);
+            commandData.fill(0);
+            return;
         }
     
         const commandFrequency = this.getCommandFrequencyForSpeed(speed);
@@ -40,11 +40,11 @@ class SoundGenerator {
             carrierFrequency = settings.spwm.minCarrierFrequency + (settings.spwm.maxCarrierFrequency - settings.spwm.minCarrierFrequency) * ratio;
         }
     
-        const carrierFactor = (1/sampleRate) * carrierFrequency / 1000;
-        const commandFactor = (1/sampleRate) * commandFrequency / 1000 * 2 * Math.PI;
+        const carrierFactor = (1 / sampleRate) * carrierFrequency / 1000;
+        const commandFactor = (1 / sampleRate) * commandFrequency / 1000 * 2 * Math.PI;
     
-        for (let i = 0; i < numSamples; i++) {
-            const scaledGlobalTime = globalTime * sampleRate;
+        for (let i = 0; i < soundData.length; i++) {
+            const scaledGlobalTime = globalTime * Math.PI;
             const carrier = (scaledGlobalTime + i * carrierFactor) % 1; // Sawtooth wave
             const command = Math.sin(scaledGlobalTime + i * commandFactor);
     
@@ -58,12 +58,15 @@ class SoundGenerator {
             }
     
             soundData[i] = output * 100;
+            commandData[i] = command * 100;
         }
-    
-        return soundData;
     }
+    
     
 }
 
-// Expose the SoundGenerator class globally
-self.SoundGenerator = SoundGenerator;
+
+export default SoundGenerator;
+
+// // Expose the SoundGenerator class globally
+// self.SoundGenerator = SoundGenerator;
