@@ -1,6 +1,52 @@
 class SoundGenerator {
     constructor(config) {
-        this.config = config;
+        this.config = {
+            "speedRanges": [
+                {
+                    "minSpeed": 1,
+                    "maxSpeed": 10,
+                    "spwm": {
+                        "type": "fixed",
+                        "carrierFrequency": 300
+                    }
+                },
+                {
+                    "minSpeed": 10,
+                    "maxSpeed": 25,
+                    "spwm": {
+                        "type": "fixed",
+                        "carrierFrequency": 600
+                    }
+                },
+                {
+                    "minSpeed": 25,
+                    "maxSpeed": 75,
+                    "spwm": {
+                        "type": "ramp",
+                        "minCarrierFrequency": 800,
+                        "maxCarrierFrequency": 1200
+                    }
+                },
+                {
+                    "minSpeed": 75,
+                    "maxSpeed": 125,
+                    "spwm": {
+                        "type": "ramp",
+                        "minCarrierFrequency": 1000,
+                        "maxCarrierFrequency": 2000
+                    }
+                },
+                {
+                    "minSpeed": 125,
+                    "maxSpeed": 201,
+                    "spwm": {
+                        "type": "ramp",
+                        "minCarrierFrequency": 1100,
+                        "maxCarrierFrequency": 2200
+                    }
+                }
+            ]
+        }.speedRanges;
         this.globalPhase = 0;
     }
 
@@ -20,7 +66,7 @@ class SoundGenerator {
     }
 
     generateSineWave(sampleRate, frequency, soundData) {
-        const amplitude = 100.0; // Amplitude of the sine wave
+        const amplitude = 0.5; // Amplitude of the sine wave
         const deltaPhase = (2 * Math.PI * frequency) / sampleRate; // Phase increment per sample
         const length = soundData.length;
 
@@ -35,14 +81,7 @@ class SoundGenerator {
         }
     }
 
-    generateSoundData(speed, soundData, commandData, globalTime, sampleRate = 44100) {
-        // Check if the speed is below the minimum speed
-        if (speed < this.config[0].minSpeed) {
-            // Generate a flat signal (all zeros)
-            soundData.fill(0);
-            commandData.fill(0);
-            return;
-        }
+    generateSoundData(speed, soundData, commandData, sampleRate = 44100) {
 
         const commandFrequency = this.getCommandFrequencyForSpeed(speed);
         const settings = this.getSettingsForSpeed(speed);
@@ -57,7 +96,7 @@ class SoundGenerator {
             carrierFrequency = settings.spwm.minCarrierFrequency + (settings.spwm.maxCarrierFrequency - settings.spwm.minCarrierFrequency) * ratio;
         }
 
-        return this.generateSineWave(sampleRate, commandFrequency*20, soundData);
+        // return this.generateSineWave(sampleRate, commandFrequency*20, soundData);
 
         const carrierFactor = (1 / sampleRate) * carrierFrequency;
         const commandFactor = (1 / sampleRate) * commandFrequency * 2 * Math.PI;
@@ -75,8 +114,8 @@ class SoundGenerator {
                 output = 0;
             }
 
-            soundData[i] = output * 100;
-            commandData[i] = command * 100;
+            soundData[i] = output * 0.5;
+            commandData[i] = command * 0.5;
         }
 
         // Update the global phase based on the number of samples processed
@@ -88,7 +127,4 @@ class SoundGenerator {
 }
 
 
-export default SoundGenerator;
-
-// // Expose the SoundGenerator class globally
-// self.SoundGenerator = SoundGenerator;
+// export default SoundGenerator;

@@ -3,25 +3,30 @@ class AudioPlayer {
         this.audioContext = null;
         this.audioBuffer = null;
         this.sourceNode = null;
-        this.bufferSize = 1024; // Increase the buffer size
+        this.bufferSize; // set by simulator class
         this.audioBufferQueue = [];
-        this.maxQueueSize = 3; // Maximum number of buffers in the queue
+        this.maxQueueSize; // set by simulator class
     }
 
     async initializeAudioContext() {
         if (!this.audioContext) {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            console.log("[INIT] Audio Context Sample Rate Is " + this.audioContext.sampleRate);
         }
         if (this.audioContext.state === 'suspended') {
             await this.audioContext.resume();
         }
+    }
+    
+    getSampleRate() {
+        return this.audioContext.sampleRate;
     }
 
     async createAudioBuffer(soundData) {
         const audioBuffer = this.audioContext.createBuffer(1, soundData.length, this.audioContext.sampleRate);
         const channelData = audioBuffer.getChannelData(0);
         for (let i = 0; i < soundData.length; i++) {
-            channelData[i] = soundData[i] / 100; // Normalize to range [-1, 1]
+            channelData[i] = soundData[i] / 200; // Normalize to range [-1, 1]
         }
         return audioBuffer;
     }
