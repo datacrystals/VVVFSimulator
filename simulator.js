@@ -2,27 +2,6 @@ import OscilloscopeDisplay from './display.js';
 import AudioPlayer from './audioPlayer.js';
 import SoundGenerator from './generator.js';
 
-function shrinkArray(array, targetSize) {
-    if (array.length <= targetSize) {
-        return array; // No need to shrink if the array is already at or below the target size
-    }
-
-    let currentSize = array.length;
-    let n = Math.ceil(currentSize / targetSize);
-
-    let result = new Float32Array(targetSize);
-    let resultIndex = 0;
-
-    for (let i = 0; i < currentSize; i += n) {
-        if (resultIndex < targetSize) {
-            result[resultIndex] = array[i];
-            resultIndex++;
-        }
-    }
-
-    return result;
-}
-
 class TrainSimulator {
     constructor(speedDisplay, canvas, ctx) {
         this.speedDisplay = speedDisplay;
@@ -52,8 +31,22 @@ class TrainSimulator {
         this.soundGenerator = new SoundGenerator(this.spwmConfig);
 
         // Setup Audio Stuff, Get Config
-        this.audioPlayer.initializeAudioContext();
-        this.sampleRate = this.audioPlayer.getSampleRate();
+        await this.audioPlayer.initializeAudioContext();
+        this.sampleRate = this.audioPlayer.getSampleRate(); // Correctly call getSampleRate
+
+        // Set the sound generator function
+        this.audioPlayer.setSoundGenerator((bufferSize, sampleRate) => {
+            const soundData = new Float32Array(bufferSize);
+            const commandData = new Float32Array(bufferSize);
+
+            for (let i = 0; i < bufferSize; i++) {
+                const sample = this.soundGenerator.generateSample(this.trainSpeed, sampleRate);
+                soundData[i] = sample.soundSample;
+                commandData[i] = sample.commandSample;
+            }
+
+            return soundData;
+        });
     }
 
     updateSpeed() {
@@ -78,16 +71,13 @@ class TrainSimulator {
             commandData[i] = sample.commandSample;
         }
 
-        this.audioPlayer.updateSound(soundData);
-
         this.oscilloscope.sampleRate = this.sampleRate;
         this.oscilloscope.clear();
-        this.oscilloscope.drawLine(shrinkArray(soundData, this.canvas.width), "green");
-        this.oscilloscope.drawLine(shrinkArray(commandData, this.canvas.width), "red");
+        // this.oscilloscope.drawLine(shrinkArray(soundData, this.canvas.width), "green");
+        // this.oscilloscope.drawLine(shrinkArray(commandData, this.canvas.width), "red");
 
         requestAnimationFrame(() => this.update());
     }
-
 
     setPower(level) {
         this.powerLevel = level;
@@ -103,6 +93,27 @@ class TrainSimulator {
         this.brakingLevel = level;
         this.powerLevel = 0;
     }
+}
+
+function shrinkArray(array, targetSize) {
+    if (array.length <= targetSize) {
+        return array; // No need to shrink if the array is already at or below the target size
+    }
+
+    let currentSize = array.length;
+    let n = Math.ceil(currentSize / targetSize);
+
+    let result = new Float32Array(targetSize);
+    let resultIndex = 0;
+
+    for (let i = 0; i < currentSize; i += n) {
+        if (resultIndex < targetSize) {
+            result[resultIndex] = array[i];
+            resultIndex++;
+        }
+    }
+
+    return result;
 }
 
 export default TrainSimulator;
