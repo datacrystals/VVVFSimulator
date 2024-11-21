@@ -32,7 +32,6 @@ class TrainSimulator {
         this.powerLevel = 0;
         this.brakingLevel = 0;
         this.spwmConfig = [];
-        
 
         // Audio Sample Config
         this.sampleRate = -1; // automatically set by the system when the audio context is initialized
@@ -42,30 +41,15 @@ class TrainSimulator {
         this.audioPlayer.maxQueueSize = 1;
 
         this.oscilloscope = new OscilloscopeDisplay(canvas, ctx);
-        // this.soundWorker = new Worker(new URL('./soundWorker.js', import.meta.url));
         this.startTime = performance.now(); // Initialize start time
         this.soundGenerator = null;
-
-
-
-        // this.soundWorker.onmessage = (e) => {
-        //     const { type, data } = e.data;
-        //     if (type === 'soundData') {
-        //         this.soundData = data;
-        //         this.audioPlayer.updateSound(this.soundData).catch(error => {
-        //             console.error('Error updating sound:', error);
-        //         });
-        //     }
-        // };
     }
 
     async loadConfig(configPath) {
         const response = await fetch(configPath);
         const config = await response.json();
         this.spwmConfig = config.speedRanges;
-        // this.soundWorker.postMessage({ type: 'init', data: this.spwmConfig });
-        this.soundGenerator = new SoundGenerator(this.spwmConfig)
-
+        this.soundGenerator = new SoundGenerator(this.spwmConfig);
 
         // Setup Audio Stuff, Get Config
         this.audioPlayer.initializeAudioContext();
@@ -82,15 +66,18 @@ class TrainSimulator {
         this.speedDisplay.textContent = this.trainSpeed.toFixed(1);
     }
 
-
     update() {
         this.updateSpeed();
-        // this.generateSoundData();
+
         let soundData = new Float32Array(this.bufferSize);
         let commandData = new Float32Array(this.bufferSize);
-        const globalTime = (performance.now() - this.startTime) / 1000; // Calculate global time in seconds
-        this.soundGenerator.generateSoundData(this.trainSpeed, soundData, commandData, globalTime, this.sampleRate);
-        
+
+        for (let i = 0; i < this.bufferSize; i++) {
+            const sample = this.soundGenerator.generateSample(this.trainSpeed, this.sampleRate);
+            soundData[i] = sample.soundSample;
+            commandData[i] = sample.commandSample;
+        }
+
         this.audioPlayer.updateSound(soundData);
 
         this.oscilloscope.sampleRate = this.sampleRate;

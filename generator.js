@@ -1,13 +1,24 @@
 class SoundGenerator {
     constructor(config) {
         this.config = config;
-        this.globalPhase = 0;
+        // this.globalPhase = 0;
+
+        let numControlFrequencies = 2;
+        this.globalPhases = new Array(numControlFrequencies).fill(0);
     }
 
     getCommandFrequencyForSpeed(speed) {
         // Define the command frequency based on the train speed
         // For example, a linear ramp from 10 Hz at 0 km/h to 100 Hz at 200 km/h
-        return 10 + (speed / 200) * 90;
+        return speed;
+    }
+
+    getCommandAmplitudeForSpeed(speed) {
+        // let FullPowerSpeed = 15;
+        // if (speed < FullPowerSpeed) {
+        //     return (FullPowerSpeed - speed) / FullPowerSpeed;
+        // }
+        return 1;
     }
 
     getSettingsForSpeed(speed) {
@@ -19,37 +30,35 @@ class SoundGenerator {
         return null; // Default settings if no range matches
     }
 
-    generateSineWave(sampleRate, frequency, soundData) {
-        const amplitude = 100.0; // Amplitude of the sine wave
-        const deltaPhase = (2 * Math.PI * frequency) / sampleRate; // Phase increment per sample
-        const length = soundData.length;
+    // generateSinSample(sampleRate, frequency) {
+    //     const amplitude = 0.5; // Amplitude of the sine wave
+    //     const deltaPhase = (2 * Math.PI * frequency) / sampleRate; // Phase increment per sample
+    //     const sample = amplitude * Math.sin(this.globalPhase);
+    //     this.globalPhase += deltaPhase;
 
-        for (let i = 0; i < length; i++) {
-            soundData[i] = amplitude * Math.sin(this.globalPhase);
-            this.globalPhase += deltaPhase;
+    //     // Ensure the phase stays within the range [0, 2*PI)
+    //     if (this.globalPhase >= 2 * Math.PI) {
+    //         this.globalPhase -= 2 * Math.PI;
+    //     }
 
-            // Ensure the phase stays within the range [0, 2*PI)
-            if (this.globalPhase >= 2 * Math.PI) {
-                this.globalPhase -= 2 * Math.PI;
-            }
-        }
-    }
+    //     return sample;
+    // }
 
-    generateSoundData(speed, soundData, commandData, globalTime, sampleRate = 44100) {
-        // Check if the speed is below the minimum speed
-        if (speed < this.config[0].minSpeed) {
-            // Generate a flat signal (all zeros)
-            soundData.fill(0);
-            commandData.fill(0);
-            return;
-        }
-
+    generateSample(speed, sampleRate) {
         const commandFrequency = this.getCommandFrequencyForSpeed(speed);
         const settings = this.getSettingsForSpeed(speed);
-        const carrierAmplitude = 1;
-        const commandAmplitude = 1;
+        const commandAmplitude = this.getCommandAmplitudeForSpeed(speed);
+        const carrierAmplitude = 0.5;
+        const powerRail = 1;
         let carrierFrequency;
 
+        if (!settings) {
+            return {
+                soundSample: 0,
+                commandSample: 0,
+                carrierSample: 0
+            };
+        }
         if (settings.spwm.type === 'fixed') {
             carrierFrequency = settings.spwm.carrierFrequency;
         } else if (settings.spwm.type === 'ramp') {
@@ -57,38 +66,48 @@ class SoundGenerator {
             carrierFrequency = settings.spwm.minCarrierFrequency + (settings.spwm.maxCarrierFrequency - settings.spwm.minCarrierFrequency) * ratio;
         }
 
-        return this.generateSineWave(sampleRate, commandFrequency*20, soundData);
 
-        const carrierFactor = (1 / sampleRate) * carrierFrequency;
-        const commandFactor = (1 / sampleRate) * commandFrequency * 2 * Math.PI;
 
-        for (let i = 0; i < soundData.length; i++) {
-            const scaledGlobalTime = (this.globalPhase + i * carrierFactor) % 1; // Sawtooth wave
-            const command = Math.sin(this.globalPhase + i * commandFactor);
+        // Generate the carrier sample and command sample
+        const carrierFactor = (2 * Math.PI / sampleRate) * carrierFrequency;
+        const carrier = ((this.globalPhases[0] + carrierFactor) % Math.PI) / Math.PI; // Sawtooth wave with period π
+        this.globalPhases[0] += carrierFactor;
 
-            let output;
-            if (command > 0 && command > scaledGlobalTime) {
-                output = commandAmplitude;
-            } else if (command < 0 && command < -scaledGlobalTime) {
-                output = -commandAmplitude;
-            } else {
-                output = 0;
-            }
+        const commandFactor = (2 * Math.PI * commandFrequency / sampleRate);
+        const command = Math.sin(this.globalPhases[1] + commandFactor) * commandAmplitude;
+        this.globalPhases[1] += commandFactor;
 
-            soundData[i] = output * 100;
-            commandData[i] = command * 100;
+        let output;
+        if (command > 0 && command > carrier) {
+            output = powerRail;
+        } else if (command < 0 && command < -carrier) {
+            output = -powerRail;
+        } else {
+            output = 0;
         }
 
-        // Update the global phase based on the number of samples processed
-        this.globalPhase += soundData.length * carrierFactor;
-        console.log(this.globalPhase);
+
+        // Ensure the phases stay within the range [0, 2*PI)
+        this.wrapPhases();
+
+        return {
+            soundSample: output * 0.5,
+            commandSample: command * 0.5,
+            carrierSample: carrier * 0.5
+        };
     }
-    
-    
+
+
+    // Function to check and wrap the limits of every element in the globalPhases array
+    wrapPhases() {
+        const twoPi = 2 * Math.PI;
+        for (let i = 0; i < this.globalPhases.length; i++) {
+            if (this.globalPhases[i] >= twoPi) {
+                this.globalPhases[i] -= twoPi;
+            }
+        }
+    }
+
 }
 
-
 export default SoundGenerator;
-
-// // Expose the SoundGenerator class globally
-// self.SoundGenerator = SoundGenerator;

@@ -26,7 +26,7 @@ class AudioPlayer {
         const audioBuffer = this.audioContext.createBuffer(1, soundData.length, this.audioContext.sampleRate);
         const channelData = audioBuffer.getChannelData(0);
         for (let i = 0; i < soundData.length; i++) {
-            channelData[i] = soundData[i] / 200; // Normalize to range [-1, 1]
+            channelData[i] = soundData[i] / 1.5; // Normalize to range [-1, 1]
         }
         return audioBuffer;
     }

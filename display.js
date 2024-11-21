@@ -31,8 +31,8 @@ class OscilloscopeDisplay {
                             display: true,
                             text: 'Amplitude'
                         },
-                        min: -150, // Set the minimum value of the y-axis
-                        max: 150,  // Set the maximum value of the y-axis
+                        min: -1.5, // Set the minimum value of the y-axis
+                        max: 1.5,  // Set the maximum value of the y-axis
                         ticks: {
                             stepSize: 50 // Set the step size for the y-axis ticks
                         }
