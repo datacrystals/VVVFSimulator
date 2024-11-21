@@ -73,8 +73,8 @@ class TrainSimulator {
 
         this.oscilloscope.sampleRate = this.sampleRate;
         this.oscilloscope.clear();
-        // this.oscilloscope.drawLine(shrinkArray(soundData, this.canvas.width), "green");
-        // this.oscilloscope.drawLine(shrinkArray(commandData, this.canvas.width), "red");
+        this.oscilloscope.drawLine(shrinkArray(soundData, this.canvas.width), "green");
+        this.oscilloscope.drawLine(shrinkArray(commandData, this.canvas.width), "red");
 
         requestAnimationFrame(() => this.update());
     }
