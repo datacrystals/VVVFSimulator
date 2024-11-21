@@ -38,7 +38,7 @@ class TrainSimulator {
         this.bufferSize = 1024;
         this.audioPlayer = new AudioPlayer();
         this.audioPlayer.bufferSize = this.bufferSize;
-        this.audioPlayer.maxQueueSize = 1;
+        this.audioPlayer.maxQueueSize = 3;
 
         this.oscilloscope = new OscilloscopeDisplay(canvas, ctx);
         this.startTime = performance.now(); // Initialize start time
@@ -87,6 +87,7 @@ class TrainSimulator {
 
         requestAnimationFrame(() => this.update());
     }
+
 
     setPower(level) {
         this.powerLevel = level;

@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const simulator = new TrainSimulator(speedDisplay, canvas, ctx);
 
-    // Load SPWM configuration
-    await simulator.loadConfig('config.json');
 
     const buttons = {
         p3: document.getElementById('p3'),
@@ -41,7 +39,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize or resume the AudioContext after a user gesture (click or keypress)
     const initializeAudio = async () => {
-        await simulator.audioPlayer.initializeAudioContext();
+        // await simulator.audioPlayer.initializeAudioContext();
+        
+        // Load SPWM configuration
+        await simulator.loadConfig('config.json');
+
         simulator.update();
         // Remove the event listeners after initialization
         document.removeEventListener('click', initializeAudio);
