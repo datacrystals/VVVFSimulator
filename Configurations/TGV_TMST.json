@@ -1,0 +1,53 @@
+{
+    "name": "TGV TMST",
+    "manufacturer": "GEC-Alsthom",
+    "date": "2024-11-22",
+    "description": "British Rail Class 373, also known as the TGV TMST is the first generation Eurostar passenger train into the channel tunnel.",
+    "maxAcceleration_kmh_s": "2",
+    "maxSpeed_kmh": 300,
+    "speedRanges": [
+        {
+            "minSpeed": -1,
+            "maxSpeed": 10,
+            "spwm": {
+                "type": "fixed",
+                "carrierFrequency": 400
+            }
+        },
+        {
+            "minSpeed": 10,
+            "maxSpeed": 25,
+            "spwm": {
+                "type": "fixed",
+                "carrierFrequency": 800
+            }
+        },
+        {
+            "minSpeed": 25,
+            "maxSpeed": 75,
+            "spwm": {
+                "type": "ramp",
+                "minCarrierFrequency": 450,
+                "maxCarrierFrequency": 1200
+            }
+        },
+        {
+            "minSpeed": 75,
+            "maxSpeed": 125,
+            "spwm": {
+                "type": "ramp",
+                "minCarrierFrequency": 1000,
+                "maxCarrierFrequency": 2000
+            }
+        },
+        {
+            "minSpeed": 125,
+            "maxSpeed": 201,
+            "spwm": {
+                "type": "ramp",
+                "minCarrierFrequency": 1100,
+                "maxCarrierFrequency": 2200
+            }
+        }
+    ]
+}

@@ -1,8 +1,11 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     text-align: center;
-    background-color: #121212;
-    color: #ffffff;
+    background-color: #0a0a0a;
+    color: #00ffcc;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 .container {
@@ -12,14 +15,74 @@ body {
     align-items: center;
 }
 
-.speed-display {
-    font-size: 24px;
+h1 {
+    font-size: 48px;
+    text-shadow: 0 0 10px #00ffcc;
     margin-bottom: 20px;
+}
+
+.config-selector {
+    margin-bottom: 20px;
+}
+
+.config-selector label {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.config-selector select {
+    font-size: 20px;
+    padding: 5px;
+    background-color: #1a1a1a;
+    color: #00ffcc;
+    border: 2px solid #00ffcc;
+    border-radius: 5px;
+}
+
+.config-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+.config-stats table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.config-stats th, .config-stats td {
+    padding: 10px;
+    border: 1px solid #00ffcc;
+    text-align: left;
+}
+
+.config-stats th {
+    background-color: #1a1a1a;
+}
+
+.config-stats img {
+    max-width: 150px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+.speed-display {
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #00ffcc;
 }
 
 .controls {
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .buttons-column {
@@ -31,37 +94,73 @@ body {
 .buttons-column button {
     margin: 5px 0;
     padding: 10px;
-    background-color: #333;
-    color: #ffffff;
-    border: none;
+    background-color: #1a1a1a;
+    color: #00ffcc;
+    border: 2px solid #00ffcc;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 5px;
+    font-size: 18px;
 }
 
 .buttons-column button:hover {
-    background-color: #555;
+    background-color: #00ffcc;
+    color: #1a1a1a;
 }
 
 .buttons-column button.active-power {
     background-color: #007BFF;
+    color: #ffffff;
 }
 
 .buttons-column button.active-neutral {
     background-color: #28A745;
+    color: #ffffff;
 }
 
 .buttons-column button.active-braking {
     background-color: #FFC107;
+    color: #1a1a1a;
 }
 
 canvas {
-    border: 1px solid #ffffff;
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00ffcc;
 }
 
 .volume-slider {
     margin-top: 20px;
 }
 
+.volume-slider label {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
 .volume-slider input[type="range"] {
     width: 200px;
+    background-color: #1a1a1a;
+    border: 2px solid #00ffcc;
+    border-radius: 5px;
+    outline: none;
+    appearance: none;
+    height: 10px;
+}
+
+.volume-slider input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #00ffcc;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #00ffcc;
+    border-radius: 50%;
+    cursor: pointer;
 }

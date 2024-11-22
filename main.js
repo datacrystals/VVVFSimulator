@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const configDescription = document.getElementById('configDescription');
     const configMaxAcceleration = document.getElementById('configMaxAcceleration');
     const configMaxSpeed = document.getElementById('configMaxSpeed');
+    const manufacturerLogo = document.getElementById('manufacturerLogo');
 
     async function loadConfigurations() {
         const response = await fetch('Configurations/Manifest.json');
@@ -88,12 +89,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function displayConfigStats(config) {
-        configName.textContent = `Name: ${config.name}`;
-        configManufacturer.textContent = `Manufacturer: ${config.manufacturer}`;
-        configDate.textContent = `Date: ${config.date}`;
-        configDescription.textContent = `Description: ${config.description}`;
-        configMaxAcceleration.textContent = `Max Acceleration: ${config.maxAcceleration_kmh_s} km/h/s`;
-        configMaxSpeed.textContent = `Max Speed: ${config.maxSpeed_kmh} km/h`;
+        configName.textContent = config.name;
+        configManufacturer.textContent = config.manufacturer;
+        configDate.textContent = config.date;
+        configDescription.textContent = config.description;
+        configMaxAcceleration.textContent = `${config.maxAcceleration_kmh_s} km/h/s`;
+        configMaxSpeed.textContent = `${config.maxSpeed_kmh} km/h`;
+
+        // Load manufacturer logo
+        manufacturerLogo.src = `Assets/Logos/${config.manufacturer.toLowerCase()}.png`;
+        manufacturerLogo.alt = `${config.manufacturer} Logo`;
     }
 
     // Load configurations immediately on page load

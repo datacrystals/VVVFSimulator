@@ -1,7 +1,8 @@
 {
-    "defaultConfig": "GenericGTO.json",
+    "defaultConfig": "Generic_GTO.json",
     "configs": [
-        "GenericIGBT.json",
-        "GenericGTO.json"
+        "Generic_IGBT.json",
+        "Generic_GTO.json",
+        "TGV_TMST.json"
     ]
 }
