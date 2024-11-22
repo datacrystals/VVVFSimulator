@@ -12,13 +12,19 @@ class TrainControls {
 
     highlightButton(buttonId) {
         for (const id in this.buttons) {
-            this.buttons[id].classList.remove('active-power', 'active-neutral', 'active-braking');
+            this.buttons[id].classList.remove('active-power', 'active-neutral', 'active-braking', 'active-power-prev', 'active-braking-prev');
         }
         if (buttonId.startsWith('p')) {
+            for (let i = 1; i <= parseInt(buttonId.slice(1)); i++) {
+                this.buttons[`p${i}`].classList.add('active-power-prev');
+            }
             this.buttons[buttonId].classList.add('active-power');
         } else if (buttonId === 'n') {
             this.buttons[buttonId].classList.add('active-neutral');
         } else if (buttonId.startsWith('b')) {
+            for (let i = 1; i <= parseInt(buttonId.slice(1)); i++) {
+                this.buttons[`b${i}`].classList.add('active-braking-prev');
+            }
             this.buttons[buttonId].classList.add('active-braking');
         }
     }

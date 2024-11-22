@@ -42,11 +42,21 @@
                 </tr>
             </table>
         </div>
-        <div class="speed-display">
-            <label for="speed">Train Speed:</label>
-            <span id="speed">0</span> km/h
+        <div class="speedometer-container">
+            <div class="speedometer">
+                <div class="speedometer-bar" id="speedometer-bar"></div>
+                <div class="speedometer-graduations">
+                    <span>0</span>
+                    <span>50</span>
+                    <span>100</span>
+                    <span>150</span>
+                    <span>200</span>
+                </div>
+            </div>
+            <div class="speedometer-digital" id="speedometer-digital">0</div>
         </div>
-        <div class="controls">
+        
+        <div class="controls-container">
             <div class="buttons-column">
                 <button id="p3" onclick="setPower(3)">P3</button>
                 <button id="p2" onclick="setPower(2)">P2</button>

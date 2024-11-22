@@ -23,10 +23,13 @@ class TrainSimulator {
         this.startTime = performance.now(); // Initialize start time
         this.soundGeneratorForAudio = null; // Separate instance for audio
         this.soundGeneratorForOscilloscope = null; // Separate instance for oscilloscope
+
+        // Speedometer elements
+        this.speedometerBar = document.getElementById('speedometer-bar');
+        this.speedometerDigital = document.getElementById('speedometer-digital');
     }
 
     async loadConfig(configPath) {
-
         // Reset params
         this.trainSpeed = 0; // Start at 0 km/h
         this.powerLevel = 0;
@@ -48,7 +51,6 @@ class TrainSimulator {
                 return this.soundGeneratorForAudio.generateSample(this.trainSpeed, this.sampleRate).soundSample;
             }
         });
-        // this.playAudio();
     }
 
     updateSpeed() {
@@ -58,7 +60,8 @@ class TrainSimulator {
             this.trainSpeed -= this.brakingLevel * this.maxAcceleration * 0.1;
         }
         this.trainSpeed = Math.max(0, Math.min(this.trainSpeed, this.maxSpeed)); // Ensure speed is within 0 to maxSpeed
-        this.speedDisplay.textContent = this.trainSpeed.toFixed(1);
+        this.speedometerDigital.textContent = this.trainSpeed.toFixed(1);
+        this.speedometerBar.style.width = `${(this.trainSpeed / this.maxSpeed) * 100}%`;
     }
 
     update() {
