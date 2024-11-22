@@ -1,3 +1,4 @@
+/* styles.css */
 body {
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
@@ -86,56 +87,6 @@ h1 {
     background-color: white; /* White background for the image */
 }
 
-.speedometer-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #ff0000;
-    padding-bottom: 20px;
-    width: 100%;
-}
-
-.speedometer {
-    width: 80%;
-    height: 30px;
-    background-color: #1a1a1a;
-    border: 1px solid #ff0000;
-    border-radius: 5px;
-    position: relative;
-    overflow: hidden;
-}
-
-.speedometer-bar {
-    height: 100%;
-    background-color: #ff0000;
-    width: 0%;
-    transition: width 0.5s;
-}
-
-.speedometer-graduations {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 5px;
-}
-
-.speedometer-graduations span {
-    font-size: 14px;
-    color: #ffffff;
-}
-
-.speedometer-digital {
-    margin-left: 20px;
-    font-size: 36px;
-    text-shadow: 0 0 5px #ff0000;
-    color: #ffff00;
-}
-
 .controls-container {
     display: flex;
     justify-content: center;
@@ -144,6 +95,20 @@ h1 {
     border-bottom: 2px solid #ff0000;
     padding-bottom: 20px;
     width: 100%;
+}
+
+.speedometer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.speedometer-digital {
+    margin-top: 10px;
+    font-size: 36px;
+    text-shadow: 0 0 5px #ff0000;
+    color: #ffff00;
 }
 
 .buttons-column {
@@ -197,6 +162,11 @@ canvas {
     border: 1px solid #ff0000;
     border-radius: 10px;
     box-shadow: 0 0 5px #ff0000;
+}
+
+#speedometer {
+    width: 50px;
+    height: 600px;
 }
 
 .volume-slider {

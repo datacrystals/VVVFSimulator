@@ -1,3 +1,4 @@
+// simulator.js
 import OscilloscopeDisplay from './display.js';
 import AudioPlayer from './audioPlayer.js';
 import SoundGenerator from './generator.js';
@@ -12,7 +13,7 @@ class TrainSimulator {
         this.brakingLevel = 0;
         this.spwmConfig = [];
         this.maxAcceleration = 2; // Default max acceleration
-        this.maxSpeed = 200; // Default max speed
+        this.maxSpeed = 400; // Updated max speed
 
         // Audio Sample Config
         this.sampleRate = 44100; // Default sample rate
@@ -25,7 +26,8 @@ class TrainSimulator {
         this.soundGeneratorForOscilloscope = null; // Separate instance for oscilloscope
 
         // Speedometer elements
-        this.speedometerBar = document.getElementById('speedometer-bar');
+        this.speedometerCanvas = document.getElementById('speedometer');
+        this.speedometerCtx = this.speedometerCanvas.getContext('2d');
         this.speedometerDigital = document.getElementById('speedometer-digital');
     }
 
@@ -41,7 +43,7 @@ class TrainSimulator {
         const config = await response.json();
         this.spwmConfig = config.speedRanges;
         this.maxAcceleration = parseFloat(config.maxAcceleration_kmh_s);
-        this.maxSpeed = config.maxSpeed_kmh;
+        this.maxSpeed = 400; // Updated max speed
         this.soundGeneratorForAudio = new SoundGenerator(this.spwmConfig);
         this.soundGeneratorForOscilloscope = new SoundGenerator(this.spwmConfig);
 
@@ -61,7 +63,35 @@ class TrainSimulator {
         }
         this.trainSpeed = Math.max(0, Math.min(this.trainSpeed, this.maxSpeed)); // Ensure speed is within 0 to maxSpeed
         this.speedometerDigital.textContent = this.trainSpeed.toFixed(1);
-        this.speedometerBar.style.width = `${(this.trainSpeed / this.maxSpeed) * 100}%`;
+    }
+
+    drawSpeedometer() {
+        const speedometerWidth = this.speedometerCanvas.width; // Width of the speedometer
+        const speedometerHeight = this.speedometerCanvas.height; // Height of the speedometer
+
+        // Clear the speedometer canvas
+        this.speedometerCtx.clearRect(0, 0, speedometerWidth, speedometerHeight);
+
+        // Draw the background of the speedometer
+        this.speedometerCtx.fillStyle = '#1a1a1a';
+        this.speedometerCtx.fillRect(0, 0, speedometerWidth, speedometerHeight);
+
+        // Draw the speedometer bar
+        const barHeight = (this.trainSpeed / this.maxSpeed) * speedometerHeight;
+        this.speedometerCtx.fillStyle = '#0000ff'; // Blue color for the bar
+        this.speedometerCtx.fillRect(0, speedometerHeight - barHeight, speedometerWidth, barHeight);
+
+        // Draw the graduations
+        const graduationStep = 50; // 50 km/h per graduation
+        this.speedometerCtx.strokeStyle = '#ffffff';
+        this.speedometerCtx.lineWidth = 1;
+        for (let speed = 0; speed <= this.maxSpeed; speed += graduationStep) {
+            const y = speedometerHeight - (speed / this.maxSpeed) * speedometerHeight;
+            this.speedometerCtx.beginPath();
+            this.speedometerCtx.moveTo(0, y);
+            this.speedometerCtx.lineTo(speedometerWidth, y);
+            this.speedometerCtx.stroke();
+        }
     }
 
     update() {
@@ -85,6 +115,9 @@ class TrainSimulator {
         this.oscilloscope.drawLine(soundData, "green", 0); // Output signal
         this.oscilloscope.drawLine(commandData, "red", this.canvas.height / 3.5); // Command signal
         this.oscilloscope.drawLine(carrierData, "blue", -this.canvas.height / 3.5); // Carrier signal
+
+        // Draw the speedometer
+        this.drawSpeedometer();
 
         requestAnimationFrame(() => this.update());
     }
