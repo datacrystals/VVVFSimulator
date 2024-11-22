@@ -13,11 +13,9 @@ class TrainSimulator {
         this.spwmConfig = [];
 
         // Audio Sample Config
-        this.sampleRate = -1; // automatically set by the system when the audio context is initialized
-        this.bufferSize = 1024;
-        this.audioPlayer = new AudioPlayer();
-        this.audioPlayer.bufferSize = this.bufferSize;
-        this.audioPlayer.maxQueueSize = 3;
+        this.sampleRate = 44100; // Default sample rate
+        this.bufferSize = 2048;
+        this.audioPlayer = new AudioPlayer(this.sampleRate, this.bufferSize);
 
         this.oscilloscope = new OscilloscopeDisplay(canvas, ctx);
         this.startTime = performance.now(); // Initialize start time
@@ -32,23 +30,13 @@ class TrainSimulator {
         this.soundGeneratorForAudio = new SoundGenerator(this.spwmConfig);
         this.soundGeneratorForOscilloscope = new SoundGenerator(this.spwmConfig);
 
-        // Setup Audio Stuff, Get Config
-        await this.audioPlayer.initializeAudioContext();
-        this.sampleRate = this.audioPlayer.getSampleRate(); // Correctly call getSampleRate
-
-        // Set the sound generator function for audio
-        this.audioPlayer.setSoundGenerator((bufferSize, sampleRate) => {
-            const soundData = new Float32Array(bufferSize);
-            const commandData = new Float32Array(bufferSize);
-
-            for (let i = 0; i < bufferSize; i++) {
-                const sample = this.soundGeneratorForAudio.generateSample(this.trainSpeed, sampleRate);
-                soundData[i] = sample.soundSample;
-                commandData[i] = sample.commandSample;
+        // Set the sound generator for audio
+        this.audioPlayer.setGenerator({
+            generateSample: () => {
+                return this.soundGeneratorForAudio.generateSample(this.trainSpeed, this.sampleRate).soundSample;
             }
-
-            return soundData;
         });
+        this.playAudio();
     }
 
     updateSpeed() {
@@ -63,23 +51,23 @@ class TrainSimulator {
 
     update() {
         this.updateSpeed();
-    
+
         const bufferSize = this.oscilloscope.getWidth();
         let soundData = new Float32Array(bufferSize);
         let commandData = new Float32Array(bufferSize);
-    
+
         for (let i = 0; i < bufferSize; i++) {
             const sample = this.soundGeneratorForOscilloscope.generateSample(this.trainSpeed, this.sampleRate);
             soundData[i] = sample.soundSample;
             commandData[i] = sample.commandSample;
         }
         this.soundGeneratorForOscilloscope.globalPhases = [0, 0]; // reset every frame to keep the oscope generation static
-    
+
         this.oscilloscope.sampleRate = this.sampleRate;
         this.oscilloscope.clear();
         this.oscilloscope.drawLine(soundData, "green");
         this.oscilloscope.drawLine(commandData, "red");
-    
+
         requestAnimationFrame(() => this.update());
     }
 
@@ -97,7 +85,10 @@ class TrainSimulator {
         this.brakingLevel = level;
         this.powerLevel = 0;
     }
-}
 
+    playAudio() {
+        this.audioPlayer.play();
+    }
+}
 
 export default TrainSimulator;
