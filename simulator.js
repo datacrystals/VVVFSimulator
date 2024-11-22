@@ -93,7 +93,7 @@ class TrainSimulator {
         this.speedometerCtx.fillRect(0, speedometerHeight - barHeight, speedometerWidth, barHeight);
 
         // Draw the graduations
-        const graduationStep = 50; // 50 km/h per graduation
+        const graduationStep = 25; // 25 km/h per graduation
         this.speedometerCtx.strokeStyle = '#ffffff';
         this.speedometerCtx.lineWidth = 1;
         for (let speed = 0; speed <= this.maxSpeed; speed += graduationStep) {
@@ -102,6 +102,16 @@ class TrainSimulator {
             this.speedometerCtx.moveTo(0, y);
             this.speedometerCtx.lineTo(speedometerWidth, y);
             this.speedometerCtx.stroke();
+
+            // Draw the speed label
+            this.speedometerCtx.fillStyle = '#ffffff';
+            this.speedometerCtx.font = '12px Arial';
+            this.speedometerCtx.fillText(speed, speedometerWidth + 5, y + 5);
+
+            // Draw the units label
+            this.speedometerCtx.fillStyle = '#ffffff';
+            this.speedometerCtx.font = '10px Arial';
+            this.speedometerCtx.fillText('km/h', speedometerWidth + 5, y + 20);
         }
     }
 
