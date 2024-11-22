@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const simulator = new TrainSimulator(speedDisplay, canvas, ctx);
 
-
     const buttons = {
         p3: document.getElementById('p3'),
         p2: document.getElementById('p2'),
@@ -39,8 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize or resume the AudioContext after a user gesture (click or keypress)
     const initializeAudio = async () => {
-        // await simulator.audioPlayer.initializeAudioContext();
-        
         // Load SPWM configuration
         await simulator.loadConfig('config.json');
 
@@ -52,4 +49,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.addEventListener('click', initializeAudio, { once: true });
     document.addEventListener('keypress', initializeAudio, { once: true });
+
+    // Volume Slider
+    const volumeSlider = document.getElementById('volumeSlider');
+    volumeSlider.addEventListener('input', () => {
+        const volume = volumeSlider.value;
+        if (simulator.audioPlayer.gainNode) { // Check if gainNode is defined
+            simulator.audioPlayer.gainNode.gain.value = volume;
+        }
+    });
 });

@@ -5,6 +5,7 @@ class AudioPlayer {
         this.audioContext = null;
         this.scriptProcessor = null;
         this.generator = null;
+        this.gainNode = null; // Initialize gainNode
     }
 
     setGenerator(generator) {
@@ -27,8 +28,10 @@ class AudioPlayer {
     initializeAudioContext() {
         if (!this.audioContext) {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.gainNode = this.audioContext.createGain(); // Create gainNode
+            this.gainNode.connect(this.audioContext.destination); // Connect gainNode to destination
             this.scriptProcessor = this.audioContext.createScriptProcessor(this.bufferSize, 1, 1);
-            this.scriptProcessor.connect(this.audioContext.destination);
+            this.scriptProcessor.connect(this.gainNode); // Connect scriptProcessor to gainNode
             this.scriptProcessor.onaudioprocess = this.handleAudioProcess.bind(this);
         }
     }

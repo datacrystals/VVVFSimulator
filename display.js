@@ -9,11 +9,11 @@ class OscilloscopeDisplay {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    drawLine(points, color) {
+    drawLine(points, color, offsetY) {
         const width = this.canvas.width;
         const height = this.canvas.height;
         const centerY = height / 2;
-        const scaleY = height / 3; // Adjust this value to scale the waveform
+        const scaleY = height / 4; // Adjust this value to scale the waveform
 
         this.ctx.beginPath();
         this.ctx.strokeStyle = color;
@@ -21,7 +21,7 @@ class OscilloscopeDisplay {
 
         for (let i = 0; i < points.length; i++) {
             const x = (i / (points.length - 1)) * width; // Map sample index to canvas width
-            const y = centerY - points[i] * scaleY;
+            const y = centerY - points[i] * scaleY + offsetY;
 
             if (i === 0) {
                 this.ctx.moveTo(x, y);
@@ -39,7 +39,8 @@ class OscilloscopeDisplay {
 
         channels.forEach((points, index) => {
             const color = `hsl(${index * 120}, 100%, 50%)`; // Generate a unique color for each channel
-            this.drawLine(points, color);
+            const offsetY = (index - 1) * (this.canvas.height / 3); // Shift each signal vertically
+            this.drawLine(points, color, offsetY);
         });
     }
 
