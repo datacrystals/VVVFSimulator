@@ -29,6 +29,9 @@ class TrainSimulator {
         this.speedometerCanvas = document.getElementById('speedometer');
         this.speedometerCtx = this.speedometerCanvas.getContext('2d');
         this.speedometerDigital = document.getElementById('speedometer-digital');
+
+        // System time variables
+        this.lastUpdateTime = performance.now();
     }
 
     async loadConfig(configPath) {
@@ -43,7 +46,7 @@ class TrainSimulator {
         const config = await response.json();
         this.spwmConfig = config.speedRanges;
         this.maxAcceleration = parseFloat(config.maxAcceleration_kmh_s);
-        this.maxSpeed = 400; // Updated max speed
+        this.maxSpeed = config.maxSpeed_kmh;
         this.soundGeneratorForAudio = new SoundGenerator(this.spwmConfig);
         this.soundGeneratorForOscilloscope = new SoundGenerator(this.spwmConfig);
 
@@ -56,12 +59,20 @@ class TrainSimulator {
     }
 
     updateSpeed() {
+        const currentTime = performance.now();
+        const deltaTime = (currentTime - this.lastUpdateTime) / 1000; // Convert to seconds
+        this.lastUpdateTime = currentTime;
+
         if (this.powerLevel > 0) {
-            this.trainSpeed += this.powerLevel * this.maxAcceleration * 0.1;
+            const acceleration = this.powerLevel * this.maxAcceleration;
+            this.trainSpeed += acceleration * deltaTime;
         } else if (this.brakingLevel > 0) {
-            this.trainSpeed -= this.brakingLevel * this.maxAcceleration * 0.1;
+            const deceleration = this.brakingLevel * this.maxAcceleration;
+            this.trainSpeed -= deceleration * deltaTime;
         }
-        this.trainSpeed = Math.max(0, Math.min(this.trainSpeed, this.maxSpeed)); // Ensure speed is within 0 to maxSpeed
+
+        // Ensure speed is within 0 to maxSpeed
+        this.trainSpeed = Math.max(0, Math.min(this.trainSpeed, this.maxSpeed));
         this.speedometerDigital.textContent = this.trainSpeed.toFixed(1);
     }
 
