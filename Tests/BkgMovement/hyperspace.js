@@ -1,91 +1,90 @@
 const canvas = document.getElementById('hyperspaceCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
+// Initialize canvas size
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    stars.forEach(star => {
-        star.distance = 0;
-        star.velocity = baseVelocity + (Math.random() * velocityVariation);
-        star.angle = Math.random() * 2 * Math.PI;
-    });
 }
 
 window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-const numStars = 2000;
-const stars = [];
-let speed = 0;
+// Particle class
+class Particle {
+    constructor() {
+        this.centerRadius = 50; // Radius of the central circle
+        this.angle = Math.random() * 2 * Math.PI;
+        this.x = canvas.width / 2 + this.centerRadius * Math.cos(this.angle);
+        this.y = canvas.height / 2 + this.centerRadius * Math.sin(this.angle);
+        this.vx = 0;
+        this.vy = 0;
+        this.speed = 0;
+        this.size = 2;
+        this.color = 'white';
+    }
 
-const baseVelocity = 0.05;
-const velocityPerDistance = 0.002;
-const accelerationSensitivity = 0.1;
-const minVelocity = 0.05;
-const velocityVariation = 0.1;
-const minSize = 1;
-const maxSize = 10;
+    update(speedFactor) {
+        // Apply acceleration
+        const acceleration = 0.01 * speedFactor;
+        this.vx += acceleration * Math.cos(this.angle);
+        this.vy += acceleration * Math.sin(this.angle);
+        this.x += this.vx;
+        this.y += this.vy;
+        this.speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        this.size = 2 + this.speed / 5; // Increase size with speed
 
-function Star(angle) {
-    this.angle = angle;
-    this.distance = 0;
-    this.velocity = baseVelocity + (Math.random() * velocityVariation);
+        // Reset if offscreen
+        if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) {
+            this.reset(speedFactor);
+        }
+    }
+
+    reset(speedFactor) {
+        this.angle = Math.random() * 2 * Math.PI;
+        this.x = canvas.width / 2 + this.centerRadius * Math.cos(this.angle);
+        this.y = canvas.height / 2 + this.centerRadius * Math.sin(this.angle);
+        this.speed = 0;
+        this.size = 2;
+        this.vx = 0;
+        this.vy = 0;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
 }
 
-for (let i = 0; i < numStars; i++) {
-    const angle = Math.random() * 2 * Math.PI;
-    stars.push(new Star(angle));
+// Initialize particles
+const numParticles = 500;
+const particles = [];
+for (let i = 0; i < numParticles; i++) {
+    particles.push(new Particle());
 }
 
+// Speed slider
 const speedSlider = document.getElementById('speedSlider');
+let speedFactor = parseFloat(speedSlider.value);
+
 speedSlider.addEventListener('input', function() {
-    speed = parseFloat(this.value);
+    speedFactor = parseFloat(this.value);
 });
 
-let lastTime = performance.now();
-
-function animate(currentTime) {
-    const deltaTime = currentTime - lastTime;
-    lastTime = currentTime;
-
+// Animation loop
+function animate() {
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.fillStyle = 'white';
 
-    stars.forEach(star => {
-        const acceleration = baseVelocity * velocityPerDistance + speed * accelerationSensitivity;
-        star.velocity += acceleration * deltaTime + Math.random();
-        star.velocity = Math.max(minVelocity, star.velocity);
-        star.distance += star.velocity;
-
-        if (star.distance > canvas.height) {
-            star.distance = 0;
-            star.velocity = baseVelocity + (Math.random() * velocityVariation);
-            star.angle = Math.random() * 2 * Math.PI;
-        }
-
-        const x = canvas.width / 2 + star.distance * Math.cos(star.angle);
-        const y = canvas.height / 2 + star.distance * Math.sin(star.angle);
-
-        const clampedDistance = Math.max(0, star.distance);
-        const size = minSize + (maxSize - minSize) * (clampedDistance / canvas.height);
-
-        const bloomSizes = [size, size * 1.2, size * 1.4];
-        const bloomAlphas = [1, 0.7, 0.4];
-
-        bloomSizes.forEach((bSize, index) => {
-            ctx.beginPath();
-            ctx.globalAlpha = bloomAlphas[index];
-            ctx.arc(x, y, bSize, 0, 2 * Math.PI);
-            ctx.fill();
-        });
+    particles.forEach(particle => {
+        particle.update(speedFactor);
+        particle.draw();
     });
 
     requestAnimationFrame(animate);
 }
 
-animate(performance.now());
+animate();
