@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Speedometer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="speedometer-container">
+        <div class="speedometer">
+            <div class="speedometer-bar" id="speedometer-bar"></div>
+            <div class="speedometer-graduations" id="speedometer-graduations"></div>
+        </div>
+        <div class="controls">
+            <label for="top-speed">Top Speed:</label>
+            <input type="number" id="top-speed" min="1" value="100">
+            <button onclick="updateSpeedometer()">Update</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

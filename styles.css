@@ -43,7 +43,7 @@ h1 {
     background-color: #1a1a1a;
     color: #ffffff;
     border: 1px solid #ff0000;
-    border-radius: 0;
+    border-radius: 5px;
 }
 
 .config-stats {
@@ -55,7 +55,7 @@ h1 {
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid #ff0000;
-    border-radius: 0;
+    border-radius: 10px;
     box-shadow: 0 0 5px #ff0000;
     border-bottom: 2px solid #ff0000;
     padding-bottom: 20px;
@@ -81,7 +81,7 @@ h1 {
 .config-stats img {
     max-width: 150px;
     margin: 10px;
-    border-radius: 0;
+    border-radius: 10px;
     box-shadow: 0 0 5px #ff0000;
     background-color: white; /* White background for the image */
 }
@@ -91,6 +91,8 @@ h1 {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+    border-bottom: 2px solid #ff0000;
+    padding-bottom: 20px;
     width: 100%;
 }
 
@@ -99,7 +101,7 @@ h1 {
     height: 30px;
     background-color: #1a1a1a;
     border: 1px solid #ff0000;
-    border-radius: 0;
+    border-radius: 5px;
     position: relative;
     overflow: hidden;
 }
@@ -108,7 +110,7 @@ h1 {
     height: 100%;
     background-color: #ff0000;
     width: 0%;
-    transition: none; /* Remove transition for instant jump */
+    transition: width 0.5s;
 }
 
 .speedometer-graduations {
@@ -149,7 +151,7 @@ h1 {
     flex-direction: column;
     margin-right: 20px;
     border: 1px solid #ff0000;
-    border-radius: 0;
+    border-radius: 5px;
     overflow: hidden;
 }
 
@@ -193,7 +195,7 @@ h1 {
 
 canvas {
     border: 1px solid #ff0000;
-    border-radius: 0;
+    border-radius: 10px;
     box-shadow: 0 0 5px #ff0000;
 }
 
@@ -214,7 +216,7 @@ canvas {
     width: 200px;
     background-color: #1a1a1a;
     border: 1px solid #ff0000;
-    border-radius: 0;
+    border-radius: 5px;
     outline: none;
     appearance: none;
     height: 10px;
@@ -225,7 +227,7 @@ canvas {
     width: 20px;
     height: 20px;
     background-color: #ff0000;
-    border-radius: 0;
+    border-radius: 50%;
     cursor: pointer;
 }
 
@@ -233,6 +235,6 @@ canvas {
     width: 20px;
     height: 20px;
     background-color: #ff0000;
-    border-radius: 0;
+    border-radius: 50%;
     cursor: pointer;
 }
