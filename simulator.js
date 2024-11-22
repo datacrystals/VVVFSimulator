@@ -28,7 +28,7 @@ class TrainSimulator {
         // Speedometer elements
         this.speedometerCanvas = document.getElementById('speedometer');
         this.speedometerCtx = this.speedometerCanvas.getContext('2d');
-        this.speedometerDigital = document.getElementById('speedometer-digital');
+        // this.speedometerDigital = document.getElementById('speedometer-digital');
 
         // System time variables
         this.lastUpdateTime = performance.now();
@@ -73,46 +73,70 @@ class TrainSimulator {
 
         // Ensure speed is within 0 to maxSpeed
         this.trainSpeed = Math.max(0, Math.min(this.trainSpeed, this.maxSpeed));
-        this.speedometerDigital.textContent = this.trainSpeed.toFixed(1);
+        // this.speedometerDigital.textContent = this.trainSpeed.toFixed(1);
     }
 
     drawSpeedometer() {
-        const speedometerWidth = this.speedometerCanvas.width; // Width of the speedometer
-        const speedometerHeight = this.speedometerCanvas.height; // Height of the speedometer
-
+        const speedometerVerticalOffset = 75;
+        const speedometerWidth = this.speedometerCanvas.width / 2.5; // Width of the speedometer spans the entire canvas width
+        const speedometerHeight = this.speedometerCanvas.height - speedometerVerticalOffset; // Height of the speedometer
+        const marginTop = 20; // Margin at the top to prevent text cutoff
+    
         // Clear the speedometer canvas
-        this.speedometerCtx.clearRect(0, 0, speedometerWidth, speedometerHeight);
-
+        this.speedometerCtx.clearRect(0, 0, this.speedometerCanvas.width, this.speedometerCanvas.height);
+    
         // Draw the background of the speedometer
         this.speedometerCtx.fillStyle = '#1a1a1a';
-        this.speedometerCtx.fillRect(0, 0, speedometerWidth, speedometerHeight);
-
+        this.speedometerCtx.fillRect(0, marginTop, speedometerWidth, speedometerHeight - marginTop);
+    
         // Draw the speedometer bar
-        const barHeight = (this.trainSpeed / this.maxSpeed) * speedometerHeight;
-        this.speedometerCtx.fillStyle = '#0000ff'; // Blue color for the bar
+        const barHeight = (this.trainSpeed / this.maxSpeed) * (speedometerHeight - marginTop);
+        this.speedometerCtx.fillStyle = '#22aaff'; // Blue color for the bar
         this.speedometerCtx.fillRect(0, speedometerHeight - barHeight, speedometerWidth, barHeight);
-
+    
         // Draw the graduations
         const graduationStep = 25; // 25 km/h per graduation
         this.speedometerCtx.strokeStyle = '#ffffff';
         this.speedometerCtx.lineWidth = 1;
         for (let speed = 0; speed <= this.maxSpeed; speed += graduationStep) {
-            const y = speedometerHeight - (speed / this.maxSpeed) * speedometerHeight;
+            const y = speedometerHeight - (speed / this.maxSpeed) * (speedometerHeight - marginTop);
             this.speedometerCtx.beginPath();
             this.speedometerCtx.moveTo(0, y);
             this.speedometerCtx.lineTo(speedometerWidth, y);
             this.speedometerCtx.stroke();
-
+    
             // Draw the speed label
             this.speedometerCtx.fillStyle = '#ffffff';
-            this.speedometerCtx.font = '10px Arial'; // Smaller font size
+            this.speedometerCtx.font = '14px Arial'; // Smaller font size
             this.speedometerCtx.fillText(speed, speedometerWidth + 5, y + 5);
-
+    
             // Draw the units label
             this.speedometerCtx.fillStyle = '#ffffff';
-            this.speedometerCtx.font = '8px Arial'; // Smaller font size
+            this.speedometerCtx.font = '12px Arial'; // Smaller font size
             this.speedometerCtx.fillText('km/h', speedometerWidth + 5, y + 18);
         }
+    
+        // Draw the rounded, centered speed display at the bottom
+        const speedText = this.trainSpeed.toFixed(1).padStart(5, '0'); // Format speed to 3 digits plus decimal
+        const textWidth = this.speedometerCtx.measureText(speedText).width;
+        const textHeight = 20; // Adjust based on font size
+        const boxPadding = 3;
+        const boxWidth = this.speedometerCanvas.width - 4;
+        const boxHeight = textHeight*2 + 2 * boxPadding;
+        const boxX = 2;
+        const boxY = this.speedometerCanvas.height - boxHeight - 2; // Position at the bottom with some margin
+    
+        // Draw the white border around the speed number
+        this.speedometerCtx.strokeStyle = '#ffffff';
+        this.speedometerCtx.lineWidth = 1;
+        this.speedometerCtx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+    
+        // Draw the speed number inside the box
+        this.speedometerCtx.fillStyle = '#00ff00';
+        this.speedometerCtx.font = '16px Arial';
+        this.speedometerCtx.fillText(speedText, (this.speedometerCanvas.width - textWidth) / 2 - boxPadding - 3,  boxY + boxHeight - boxPadding - textHeight);
+        this.speedometerCtx.fillStyle = '#ffff00';
+        this.speedometerCtx.fillText("km/h", (this.speedometerCanvas.width - textWidth) / 2 - boxPadding, boxY + boxHeight - boxPadding * 3);
     }
 
     update() {

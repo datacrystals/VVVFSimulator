@@ -101,7 +101,7 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 20px;
+    margin-right: 0px;
 }
 
 .speedometer-digital {
@@ -144,8 +144,8 @@ h1 {
 
 .buttons-column button.active-power,
 .buttons-column button.active-power-prev {
-    background-color: #ff0000;
-    color: #ffffff;
+    background-color: #00ffff;
+    color: #000000;
 }
 
 .buttons-column button.active-neutral {
