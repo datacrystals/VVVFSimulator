@@ -105,13 +105,13 @@ class TrainSimulator {
 
             // Draw the speed label
             this.speedometerCtx.fillStyle = '#ffffff';
-            this.speedometerCtx.font = '12px Arial';
+            this.speedometerCtx.font = '10px Arial'; // Smaller font size
             this.speedometerCtx.fillText(speed, speedometerWidth + 5, y + 5);
 
             // Draw the units label
             this.speedometerCtx.fillStyle = '#ffffff';
-            this.speedometerCtx.font = '10px Arial';
-            this.speedometerCtx.fillText('km/h', speedometerWidth + 5, y + 20);
+            this.speedometerCtx.font = '8px Arial'; // Smaller font size
+            this.speedometerCtx.fillText('km/h', speedometerWidth + 5, y + 18);
         }
     }
 

@@ -106,7 +106,7 @@ h1 {
 
 .speedometer-digital {
     margin-top: 10px;
-    font-size: 24px; /* Smaller font size */
+    font-size: 20px; /* Smaller font size */
     text-shadow: 0 0 5px #ff0000;
     color: #ffff00;
 }

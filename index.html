@@ -10,6 +10,28 @@
 <body>
     <div class="container">
         <h1>VVVF Inverter Simulator</h1>
+        <div class="controls-container">
+            <div class="speedometer-container">
+                <canvas id="speedometer" width="50" height="600"></canvas>
+                <div class="speedometer-digital" id="speedometer-digital">0</div>
+            </div>
+            <div class="buttons-column">
+                <button id="p3" onclick="setPower(3)">P3</button>
+                <button id="p2" onclick="setPower(2)">P2</button>
+                <button id="p1" onclick="setPower(1)">P1</button>
+                <button id="n" onclick="setNeutral()">N</button>
+                <button id="b1" onclick="setBraking(1)">B1</button>
+                <button id="b2" onclick="setBraking(2)">B2</button>
+                <button id="b3" onclick="setBraking(3)">B3</button>
+                <button id="b4" onclick="setBraking(4)">B4</button>
+                <button id="b5" onclick="setBraking(5)">B5</button>
+            </div>
+            <canvas id="oscilloscope" width="1200" height="600"></canvas>
+        </div>
+        <div class="volume-slider">
+            <label for="volumeSlider">Volume:</label>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+        </div>
         <div class="config-selector">
             <label for="configDropdown">Select Configuration:</label>
             <select id="configDropdown"></select>
@@ -42,28 +64,6 @@
                     <td id="configMaxSpeed"></td>
                 </tr>
             </table>
-        </div>
-        <div class="controls-container">
-            <div class="speedometer-container">
-                <canvas id="speedometer" width="50" height="600"></canvas>
-                <div class="speedometer-digital" id="speedometer-digital">0</div>
-            </div>
-            <div class="buttons-column">
-                <button id="p3" onclick="setPower(3)">P3</button>
-                <button id="p2" onclick="setPower(2)">P2</button>
-                <button id="p1" onclick="setPower(1)">P1</button>
-                <button id="n" onclick="setNeutral()">N</button>
-                <button id="b1" onclick="setBraking(1)">B1</button>
-                <button id="b2" onclick="setBraking(2)">B2</button>
-                <button id="b3" onclick="setBraking(3)">B3</button>
-                <button id="b4" onclick="setBraking(4)">B4</button>
-                <button id="b5" onclick="setBraking(5)">B5</button>
-            </div>
-            <canvas id="oscilloscope" width="1200" height="600"></canvas>
-        </div>
-        <div class="volume-slider">
-            <label for="volumeSlider">Volume:</label>
-            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
         </div>
     </div>
     <script type="module" src="main.js"></script>
