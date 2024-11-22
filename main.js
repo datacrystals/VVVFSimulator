@@ -39,8 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize or resume the AudioContext after a user gesture (click or keypress)
     const initializeAudio = async () => {
         // Load SPWM configuration
-        await simulator.loadConfig('config.json');
-
+        await loadConfigurations();
         simulator.update();
         // Remove the event listeners after initialization
         document.removeEventListener('click', initializeAudio);
@@ -58,4 +57,53 @@ document.addEventListener('DOMContentLoaded', async () => {
             simulator.audioPlayer.gainNode.gain.value = volume;
         }
     });
+
+    // Configuration Dropdown
+    const configDropdown = document.getElementById('configDropdown');
+    const configName = document.getElementById('configName');
+    const configManufacturer = document.getElementById('configManufacturer');
+    const configDate = document.getElementById('configDate');
+    const configDescription = document.getElementById('configDescription');
+    const configMaxAcceleration = document.getElementById('configMaxAcceleration');
+    const configMaxSpeed = document.getElementById('configMaxSpeed');
+
+    async function loadConfigurations() {
+        const response = await fetch('Configurations/Manifest.json');
+        const manifest = await response.json();
+
+        manifest.configs.forEach(file => {
+            const option = document.createElement('option');
+            option.value = file;
+            option.textContent = file;
+            configDropdown.appendChild(option);
+        });
+
+        configDropdown.addEventListener('change', async () => {
+            const selectedConfig = configDropdown.value;
+            const configPath = `Configurations/${selectedConfig}`;
+            const config = await fetchConfig(configPath);
+            displayConfigStats(config);
+            await simulator.loadConfig(configPath);
+        });
+
+        // Load the default configuration
+        const defaultConfigPath = `Configurations/${manifest.defaultConfig}`;
+        const config = await fetchConfig(defaultConfigPath);
+        displayConfigStats(config);
+        await simulator.loadConfig(defaultConfigPath);
+    }
+
+    async function fetchConfig(configPath) {
+        const response = await fetch(configPath);
+        return await response.json();
+    }
+
+    function displayConfigStats(config) {
+        configName.textContent = `Name: ${config.name}`;
+        configManufacturer.textContent = `Manufacturer: ${config.manufacturer}`;
+        configDate.textContent = `Date: ${config.date}`;
+        configDescription.textContent = `Description: ${config.description}`;
+        configMaxAcceleration.textContent = `Max Acceleration: ${config.maxAcceleration_kmh_s} km/h/s`;
+        configMaxSpeed.textContent = `Max Speed: ${config.maxSpeed_kmh} km/h`;
+    }
 });

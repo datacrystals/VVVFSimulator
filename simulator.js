@@ -11,6 +11,8 @@ class TrainSimulator {
         this.powerLevel = 0;
         this.brakingLevel = 0;
         this.spwmConfig = [];
+        this.maxAcceleration = 2; // Default max acceleration
+        this.maxSpeed = 200; // Default max speed
 
         // Audio Sample Config
         this.sampleRate = 44100; // Default sample rate
@@ -24,9 +26,13 @@ class TrainSimulator {
     }
 
     async loadConfig(configPath) {
-        const response = await fetch(configPath);
+        // Add a cache-busting query parameter
+        const cacheBust = `?t=${new Date().getTime()}`;
+        const response = await fetch(configPath + cacheBust);
         const config = await response.json();
         this.spwmConfig = config.speedRanges;
+        this.maxAcceleration = parseFloat(config.maxAcceleration_kmh_s);
+        this.maxSpeed = config.maxSpeed_kmh;
         this.soundGeneratorForAudio = new SoundGenerator(this.spwmConfig);
         this.soundGeneratorForOscilloscope = new SoundGenerator(this.spwmConfig);
 
@@ -41,11 +47,11 @@ class TrainSimulator {
 
     updateSpeed() {
         if (this.powerLevel > 0) {
-            this.trainSpeed += this.powerLevel * 0.1;
+            this.trainSpeed += this.powerLevel * this.maxAcceleration * 0.1;
         } else if (this.brakingLevel > 0) {
-            this.trainSpeed -= this.brakingLevel * 0.1;
+            this.trainSpeed -= this.brakingLevel * this.maxAcceleration * 0.1;
         }
-        this.trainSpeed = Math.max(0, Math.min(this.trainSpeed, 200)); // Ensure speed is within 0 to 200 km/h
+        this.trainSpeed = Math.max(0, Math.min(this.trainSpeed, this.maxSpeed)); // Ensure speed is within 0 to maxSpeed
         this.speedDisplay.textContent = this.trainSpeed.toFixed(1);
     }
 
@@ -67,7 +73,6 @@ class TrainSimulator {
 
         this.oscilloscope.sampleRate = this.sampleRate;
         this.oscilloscope.clear();
-        this.oscilloscope.drawGrid();
         this.oscilloscope.drawLine(soundData, "green", 0); // Output signal
         this.oscilloscope.drawLine(commandData, "red", this.canvas.height / 3.5); // Command signal
         this.oscilloscope.drawLine(carrierData, "blue", -this.canvas.height / 3.5); // Carrier signal

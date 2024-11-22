@@ -1,0 +1,7 @@
+{
+    "defaultConfig": "GenericGTO.json",
+    "configs": [
+        "GenericIGBT.json",
+        "GenericGTO.json"
+    ]
+}

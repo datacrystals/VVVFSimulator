@@ -3,24 +3,15 @@
     "manufacturer": "generic",
     "date": "2024-11-21",
     "description": "A generic IGBT inverter.",
-    "maxAcceleration_kmh/s": "2",
+    "maxAcceleration_kmh_s": "2",
     "maxSpeed_kmh": 200,
     "speedRanges": [
         {
-            "minSpeed": -1,
-            "maxSpeed": 25,
+            "minSpeed": 0,
+            "maxSpeed": 75,
             "spwm": {
                 "type": "fixed",
                 "carrierFrequency": 1500
-            }
-        },
-        {
-            "minSpeed": 25,
-            "maxSpeed": 75,
-            "spwm": {
-                "type": "ramp",
-                "minCarrierFrequency": 450,
-                "maxCarrierFrequency": 1200
             }
         },
         {
