@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Star Wars Hyperspace Effect</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        canvas {
+            display: block;
+        }
+        #speedSlider {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<input type="range" min="0" max="10" value="0" step="0.1" id="speedSlider">
+
+<canvas id="hyperspaceCanvas"></canvas>
+
+<script src="hyperspace.js"></script>
+
+</body>
+</html>
