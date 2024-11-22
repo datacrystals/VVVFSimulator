@@ -36,19 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     controls.setNeutral();
 
-    // Initialize or resume the AudioContext after a user gesture (click or keypress)
-    const initializeAudio = async () => {
-        // Load SPWM configuration
-        await loadConfigurations();
-        simulator.update();
-        // Remove the event listeners after initialization
-        document.removeEventListener('click', initializeAudio);
-        document.removeEventListener('keypress', initializeAudio);
-    };
-
-    document.addEventListener('click', initializeAudio, { once: true });
-    document.addEventListener('keypress', initializeAudio, { once: true });
-
     // Volume Slider
     const volumeSlider = document.getElementById('volumeSlider');
     volumeSlider.addEventListener('input', () => {
@@ -78,6 +65,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             configDropdown.appendChild(option);
         });
 
+        configDropdown.value = manifest.defaultConfig; // Set the default config as selected
+
         configDropdown.addEventListener('change', async () => {
             const selectedConfig = configDropdown.value;
             const configPath = `Configurations/${selectedConfig}`;
@@ -106,4 +95,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         configMaxAcceleration.textContent = `Max Acceleration: ${config.maxAcceleration_kmh_s} km/h/s`;
         configMaxSpeed.textContent = `Max Speed: ${config.maxSpeed_kmh} km/h`;
     }
+
+    // Load configurations immediately on page load
+    loadConfigurations();
+
+    // Initialize or resume the AudioContext after a user gesture (click or keypress)
+    const initializeAudio = async () => {
+        simulator.update();
+        simulator.playAudio();
+        // Remove the event listeners after initialization
+        document.removeEventListener('click', initializeAudio);
+        document.removeEventListener('keypress', initializeAudio);
+    };
+
+    document.addEventListener('click', initializeAudio, { once: true });
+    document.addEventListener('keypress', initializeAudio, { once: true });
 });

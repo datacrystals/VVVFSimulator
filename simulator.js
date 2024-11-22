@@ -26,6 +26,12 @@ class TrainSimulator {
     }
 
     async loadConfig(configPath) {
+
+        // Reset params
+        this.trainSpeed = 0; // Start at 0 km/h
+        this.powerLevel = 0;
+        this.brakingLevel = 0;
+
         // Add a cache-busting query parameter
         const cacheBust = `?t=${new Date().getTime()}`;
         const response = await fetch(configPath + cacheBust);
@@ -42,7 +48,7 @@ class TrainSimulator {
                 return this.soundGeneratorForAudio.generateSample(this.trainSpeed, this.sampleRate).soundSample;
             }
         });
-        this.playAudio();
+        // this.playAudio();
     }
 
     updateSpeed() {

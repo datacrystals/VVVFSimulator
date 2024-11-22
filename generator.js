@@ -1,23 +1,15 @@
 class SoundGenerator {
     constructor(config) {
         this.config = config;
-        // this.globalPhase = 0;
-
         let numControlFrequencies = 2;
         this.globalPhases = new Array(numControlFrequencies).fill(0);
     }
 
     getCommandFrequencyForSpeed(speed) {
-        // Define the command frequency based on the train speed
-        // For example, a linear ramp from 10 Hz at 0 km/h to 100 Hz at 200 km/h
         return speed;
     }
 
     getCommandAmplitudeForSpeed(speed) {
-        // let FullPowerSpeed = 15;
-        // if (speed < FullPowerSpeed) {
-        //     return (FullPowerSpeed - speed) / FullPowerSpeed;
-        // }
         return 1;
     }
 
@@ -31,11 +23,19 @@ class SoundGenerator {
     }
 
     generateSample(speed, sampleRate) {
+        if (speed === 0) {
+            return {
+                soundSample: 0,
+                commandSample: 0,
+                carrierSample: 0
+            };
+        }
+
         const commandFrequency = this.getCommandFrequencyForSpeed(speed);
         const settings = this.getSettingsForSpeed(speed);
         const commandAmplitude = this.getCommandAmplitudeForSpeed(speed);
         const carrierAmplitude = 0.5;
-        const powerRail = 1.0;
+        const powerRail = 0.3;
         let carrierFrequency;
 
         if (!settings) {
@@ -52,9 +52,6 @@ class SoundGenerator {
             carrierFrequency = settings.spwm.minCarrierFrequency + (settings.spwm.maxCarrierFrequency - settings.spwm.minCarrierFrequency) * ratio;
         }
 
-
-
-        // Generate the carrier sample and command sample
         const carrierFactor = (2 * Math.PI / sampleRate) * carrierFrequency;
         const carrier = ((this.globalPhases[0] + carrierFactor) % Math.PI) / Math.PI; // Sawtooth wave with period π
         this.globalPhases[0] += carrierFactor;
@@ -72,8 +69,6 @@ class SoundGenerator {
             output = 0;
         }
 
-
-        // Ensure the phases stay within the range [0, 2*PI)
         this.wrapPhases();
 
         return {
@@ -83,8 +78,6 @@ class SoundGenerator {
         };
     }
 
-
-    // Function to check and wrap the limits of every element in the globalPhases array
     wrapPhases() {
         const twoPi = 2 * Math.PI;
         for (let i = 0; i < this.globalPhases.length; i++) {
@@ -93,7 +86,6 @@ class SoundGenerator {
             }
         }
     }
-
 }
 
 export default SoundGenerator;
