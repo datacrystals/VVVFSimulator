@@ -42,11 +42,11 @@
         },
         {
             "minSpeed": 125,
-            "maxSpeed": 201,
+            "maxSpeed": 300,
             "spwm": {
                 "type": "ramp",
                 "minCarrierFrequency": 1100,
-                "maxCarrierFrequency": 2200
+                "maxCarrierFrequency": 1800
             }
         }
     ]

@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         configMaxSpeed.textContent = `${config.maxSpeed_kmh} km/h`;
 
         // Load manufacturer logo
-        manufacturerLogo.src = `Assets/Logos/${config.manufacturer.toLowerCase()}.png`;
+        manufacturerLogo.src = `/Assets/Logos/${config.manufacturer.toLowerCase()}.png`;
         manufacturerLogo.alt = `${config.manufacturer} Logo`;
     }
 

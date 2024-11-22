@@ -1,7 +1,7 @@
 body {
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
-    background-color: #0a0a0a;
+    background-color: #121212;
     color: #00ffcc;
     margin: 0;
     padding: 0;
@@ -17,12 +17,18 @@ body {
 
 h1 {
     font-size: 48px;
-    text-shadow: 0 0 10px #00ffcc;
+    text-shadow: 0 0 5px #00ffcc;
     margin-bottom: 20px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 10px;
+    width: 100%;
 }
 
 .config-selector {
     margin-bottom: 20px;
+    width: 100%;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 20px;
 }
 
 .config-selector label {
@@ -35,19 +41,23 @@ h1 {
     padding: 5px;
     background-color: #1a1a1a;
     color: #00ffcc;
-    border: 2px solid #00ffcc;
+    border: 1px solid #00ffcc;
     border-radius: 5px;
 }
 
 .config-stats {
+    width: 1200px; /* Same width as the oscilloscope */
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #00ffcc;
     border-radius: 10px;
-    box-shadow: 0 0 10px #00ffcc;
+    box-shadow: 0 0 5px #00ffcc;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 20px;
 }
 
 .config-stats table {
@@ -70,19 +80,26 @@ h1 {
     max-width: 150px;
     margin: 10px;
     border-radius: 10px;
-    box-shadow: 0 0 10px #00ffcc;
+    box-shadow: 0 0 5px #00ffcc;
+    background-color: white; /* White background for the image */
 }
 
 .speed-display {
     font-size: 36px;
     margin-bottom: 20px;
-    text-shadow: 0 0 10px #00ffcc;
+    text-shadow: 0 0 5px #00ffcc;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 20px;
+    width: 100%;
 }
 
 .controls {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 20px;
+    width: 100%;
 }
 
 .buttons-column {
@@ -96,7 +113,7 @@ h1 {
     padding: 10px;
     background-color: #1a1a1a;
     color: #00ffcc;
-    border: 2px solid #00ffcc;
+    border: 1px solid #00ffcc;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     border-radius: 5px;
@@ -124,13 +141,16 @@ h1 {
 }
 
 canvas {
-    border: 2px solid #00ffcc;
+    border: 1px solid #00ffcc;
     border-radius: 10px;
-    box-shadow: 0 0 10px #00ffcc;
+    box-shadow: 0 0 5px #00ffcc;
 }
 
 .volume-slider {
     margin-top: 20px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 20px;
+    width: 100%;
 }
 
 .volume-slider label {
@@ -141,7 +161,7 @@ canvas {
 .volume-slider input[type="range"] {
     width: 200px;
     background-color: #1a1a1a;
-    border: 2px solid #00ffcc;
+    border: 1px solid #00ffcc;
     border-radius: 5px;
     outline: none;
     appearance: none;
