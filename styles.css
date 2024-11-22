@@ -2,7 +2,7 @@ body {
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
     background-color: #121212;
-    color: #00ffcc;
+    color: #ffffff;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -17,9 +17,9 @@ body {
 
 h1 {
     font-size: 48px;
-    text-shadow: 0 0 5px #00ffcc;
+    text-shadow: 0 0 5px #ff0000;
     margin-bottom: 20px;
-    border-bottom: 2px solid #00ffcc;
+    border-bottom: 2px solid #ff0000;
     padding-bottom: 10px;
     width: 100%;
 }
@@ -27,22 +27,23 @@ h1 {
 .config-selector {
     margin-bottom: 20px;
     width: 100%;
-    border-bottom: 2px solid #00ffcc;
+    border-bottom: 2px solid #ff0000;
     padding-bottom: 20px;
 }
 
 .config-selector label {
     font-size: 24px;
     margin-right: 10px;
+    color: #ffff00;
 }
 
 .config-selector select {
     font-size: 20px;
     padding: 5px;
     background-color: #1a1a1a;
-    color: #00ffcc;
-    border: 1px solid #00ffcc;
-    border-radius: 5px;
+    color: #ffffff;
+    border: 1px solid #ff0000;
+    border-radius: 0;
 }
 
 .config-stats {
@@ -53,10 +54,10 @@ h1 {
     margin-bottom: 20px;
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid #00ffcc;
-    border-radius: 10px;
-    box-shadow: 0 0 5px #00ffcc;
-    border-bottom: 2px solid #00ffcc;
+    border: 1px solid #ff0000;
+    border-radius: 0;
+    box-shadow: 0 0 5px #ff0000;
+    border-bottom: 2px solid #ff0000;
     padding-bottom: 20px;
 }
 
@@ -68,8 +69,9 @@ h1 {
 
 .config-stats th, .config-stats td {
     padding: 10px;
-    border: 1px solid #00ffcc;
+    border: 1px solid #ff0000;
     text-align: left;
+    color: #ffffff;
 }
 
 .config-stats th {
@@ -79,8 +81,8 @@ h1 {
 .config-stats img {
     max-width: 150px;
     margin: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 5px #00ffcc;
+    border-radius: 0;
+    box-shadow: 0 0 5px #ff0000;
     background-color: white; /* White background for the image */
 }
 
@@ -89,26 +91,24 @@ h1 {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 2px solid #00ffcc;
-    padding-bottom: 20px;
     width: 100%;
 }
 
 .speedometer {
     width: 80%;
-    height: 50px;
+    height: 30px;
     background-color: #1a1a1a;
-    border: 1px solid #00ffcc;
-    border-radius: 5px;
+    border: 1px solid #ff0000;
+    border-radius: 0;
     position: relative;
     overflow: hidden;
 }
 
 .speedometer-bar {
     height: 100%;
-    background-color: #007BFF;
+    background-color: #ff0000;
     width: 0%;
-    transition: width 0.5s;
+    transition: none; /* Remove transition for instant jump */
 }
 
 .speedometer-graduations {
@@ -124,13 +124,14 @@ h1 {
 
 .speedometer-graduations span {
     font-size: 14px;
-    color: #00ffcc;
+    color: #ffffff;
 }
 
 .speedometer-digital {
     margin-left: 20px;
     font-size: 36px;
-    text-shadow: 0 0 5px #00ffcc;
+    text-shadow: 0 0 5px #ff0000;
+    color: #ffff00;
 }
 
 .controls-container {
@@ -138,7 +139,7 @@ h1 {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 2px solid #00ffcc;
+    border-bottom: 2px solid #ff0000;
     padding-bottom: 20px;
     width: 100%;
 }
@@ -147,8 +148,8 @@ h1 {
     display: flex;
     flex-direction: column;
     margin-right: 20px;
-    border: 1px solid #00ffcc;
-    border-radius: 5px;
+    border: 1px solid #ff0000;
+    border-radius: 0;
     overflow: hidden;
 }
 
@@ -156,9 +157,9 @@ h1 {
     margin: 0;
     padding: 15px 20px; /* Wider buttons */
     background-color: #1a1a1a;
-    color: #00ffcc;
+    color: #ffffff;
     border: none;
-    border-bottom: 1px solid #00ffcc; /* Separator between buttons */
+    border-bottom: 1px solid #ff0000; /* Separator between buttons */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     font-size: 18px;
@@ -169,13 +170,13 @@ h1 {
 }
 
 .buttons-column button:hover {
-    background-color: #00ffcc;
+    background-color: #ff0000;
     color: #1a1a1a;
 }
 
 .buttons-column button.active-power,
 .buttons-column button.active-power-prev {
-    background-color: #007BFF;
+    background-color: #ff0000;
     color: #ffffff;
 }
 
@@ -191,14 +192,14 @@ h1 {
 }
 
 canvas {
-    border: 1px solid #00ffcc;
-    border-radius: 10px;
-    box-shadow: 0 0 5px #00ffcc;
+    border: 1px solid #ff0000;
+    border-radius: 0;
+    box-shadow: 0 0 5px #ff0000;
 }
 
 .volume-slider {
     margin-top: 20px;
-    border-bottom: 2px solid #00ffcc;
+    border-bottom: 2px solid #ff0000;
     padding-bottom: 20px;
     width: 100%;
 }
@@ -206,13 +207,14 @@ canvas {
 .volume-slider label {
     font-size: 24px;
     margin-right: 10px;
+    color: #ffff00;
 }
 
 .volume-slider input[type="range"] {
     width: 200px;
     background-color: #1a1a1a;
-    border: 1px solid #00ffcc;
-    border-radius: 5px;
+    border: 1px solid #ff0000;
+    border-radius: 0;
     outline: none;
     appearance: none;
     height: 10px;
@@ -222,15 +224,15 @@ canvas {
     appearance: none;
     width: 20px;
     height: 20px;
-    background-color: #00ffcc;
-    border-radius: 50%;
+    background-color: #ff0000;
+    border-radius: 0;
     cursor: pointer;
 }
 
 .volume-slider input[type="range"]::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background-color: #00ffcc;
-    border-radius: 50%;
+    background-color: #ff0000;
+    border-radius: 0;
     cursor: pointer;
 }
