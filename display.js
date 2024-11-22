@@ -2,90 +2,49 @@ class OscilloscopeDisplay {
     constructor(canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
-        this.chart = null;
-    }
-
-    initializeChart() {
-        if (this.chart) {
-            this.chart.destroy();
-        }
-
-        this.chart = new Chart(this.ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: []
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'linear',
-                        position: 'bottom',
-                        title: {
-                            display: true,
-                            text: 'Time (s)'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Amplitude'
-                        },
-                        min: -1.5, // Set the minimum value of the y-axis
-                        max: 1.5,  // Set the maximum value of the y-axis
-                        ticks: {
-                            stepSize: 50 // Set the step size for the y-axis ticks
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                animation: {
-                    duration: 0 // Disable animation for instantaneous updates
-                }
-            }
-        });
+        this.sampleRate = 0;
     }
 
     clear() {
-        if (this.chart) {
-            this.chart.data.labels = [];
-            this.chart.data.datasets = [];
-            this.chart.update('none'); // Update the chart without animation
-        }
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     drawLine(points, color) {
-        if (!this.chart) {
-            this.initializeChart();
+        const width = this.canvas.width;
+        const height = this.canvas.height;
+        const centerY = height / 2;
+        const scaleY = height / 3; // Adjust this value to scale the waveform
+
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = color;
+        this.ctx.lineWidth = 2;
+
+        for (let i = 0; i < points.length; i++) {
+            const x = (i / (points.length - 1)) * width; // Map sample index to canvas width
+            const y = centerY - points[i] * scaleY;
+
+            if (i === 0) {
+                this.ctx.moveTo(x, y);
+            } else {
+                this.ctx.lineTo(x, y);
+            }
         }
-        
 
-        const timeLabels = points.map((_, i) => i / this.sampleRate);
-        this.chart.data.labels = timeLabels;
-
-        this.chart.data.datasets.push({
-            label: 'Channel',
-            data: points,
-            borderColor: color,
-            fill: false,
-            tension: 0, // Ensure no tension for instantaneous updates
-            stepped: false // Ensure no stepping for instantaneous updates
-        });
-
-        this.chart.update('none'); // Update the chart without animation
+        this.ctx.stroke();
     }
 
     drawOscilloscope(channels, sampleRate) {
         this.sampleRate = sampleRate;
         this.clear();
+
         channels.forEach((points, index) => {
             const color = `hsl(${index * 120}, 100%, 50%)`; // Generate a unique color for each channel
             this.drawLine(points, color);
         });
+    }
+
+    getWidth() {
+        return this.canvas.width;
     }
 }
 

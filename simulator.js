@@ -63,22 +63,23 @@ class TrainSimulator {
 
     update() {
         this.updateSpeed();
-
-        let soundData = new Float32Array(this.canvas.width);
-        let commandData = new Float32Array(this.canvas.width);
-
-        for (let i = 0; i < this.bufferSize; i++) {
+    
+        const bufferSize = this.oscilloscope.getWidth();
+        let soundData = new Float32Array(bufferSize);
+        let commandData = new Float32Array(bufferSize);
+    
+        for (let i = 0; i < bufferSize; i++) {
             const sample = this.soundGeneratorForOscilloscope.generateSample(this.trainSpeed, this.sampleRate);
             soundData[i] = sample.soundSample;
             commandData[i] = sample.commandSample;
         }
-        this.soundGeneratorForOscilloscope.globalPhases = [0,0]; // reset every frame to keep the oscope generation static
-
+        this.soundGeneratorForOscilloscope.globalPhases = [0, 0]; // reset every frame to keep the oscope generation static
+    
         this.oscilloscope.sampleRate = this.sampleRate;
         this.oscilloscope.clear();
         this.oscilloscope.drawLine(soundData, "green");
         this.oscilloscope.drawLine(commandData, "red");
-
+    
         requestAnimationFrame(() => this.update());
     }
 
