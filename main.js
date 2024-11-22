@@ -1,3 +1,4 @@
+// main.js
 import TrainSimulator from './simulator.js';
 import TrainControls from './controls.js';
 
