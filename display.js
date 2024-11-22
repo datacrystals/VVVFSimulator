@@ -6,7 +6,37 @@ class OscilloscopeDisplay {
     }
 
     clear() {
+        // Draw the grid background
+        this.drawGrid();
+
+        // Clear the canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    drawGrid() {
+        const width = this.canvas.width;
+        const height = this.canvas.height;
+        const gridSize = 20; // Size of the grid cells
+        const gridColor = 'rgba(255, 255, 255, 0.1)'; // Faint grid color
+
+        this.ctx.strokeStyle = gridColor;
+        this.ctx.lineWidth = 0.5;
+
+        // Draw vertical lines
+        for (let x = 0; x < width; x += gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(x, 0);
+            this.ctx.lineTo(x, height);
+            this.ctx.stroke();
+        }
+
+        // Draw horizontal lines
+        for (let y = 0; y < height; y += gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, y);
+            this.ctx.lineTo(width, y);
+            this.ctx.stroke();
+        }
     }
 
     drawLine(points, color, offsetY) {

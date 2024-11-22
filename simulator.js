@@ -67,6 +67,7 @@ class TrainSimulator {
 
         this.oscilloscope.sampleRate = this.sampleRate;
         this.oscilloscope.clear();
+        this.oscilloscope.drawGrid();
         this.oscilloscope.drawLine(soundData, "green", 0); // Output signal
         this.oscilloscope.drawLine(commandData, "red", this.canvas.height / 3.5); // Command signal
         this.oscilloscope.drawLine(carrierData, "blue", -this.canvas.height / 3.5); // Carrier signal
