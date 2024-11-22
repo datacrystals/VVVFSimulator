@@ -21,26 +21,28 @@ class TrainSimulator {
 
         this.oscilloscope = new OscilloscopeDisplay(canvas, ctx);
         this.startTime = performance.now(); // Initialize start time
-        this.soundGenerator = null;
+        this.soundGeneratorForAudio = null; // Separate instance for audio
+        this.soundGeneratorForOscilloscope = null; // Separate instance for oscilloscope
     }
 
     async loadConfig(configPath) {
         const response = await fetch(configPath);
         const config = await response.json();
         this.spwmConfig = config.speedRanges;
-        this.soundGenerator = new SoundGenerator(this.spwmConfig);
+        this.soundGeneratorForAudio = new SoundGenerator(this.spwmConfig);
+        this.soundGeneratorForOscilloscope = new SoundGenerator(this.spwmConfig);
 
         // Setup Audio Stuff, Get Config
         await this.audioPlayer.initializeAudioContext();
         this.sampleRate = this.audioPlayer.getSampleRate(); // Correctly call getSampleRate
 
-        // Set the sound generator function
+        // Set the sound generator function for audio
         this.audioPlayer.setSoundGenerator((bufferSize, sampleRate) => {
             const soundData = new Float32Array(bufferSize);
             const commandData = new Float32Array(bufferSize);
 
             for (let i = 0; i < bufferSize; i++) {
-                const sample = this.soundGenerator.generateSample(this.trainSpeed, sampleRate);
+                const sample = this.soundGeneratorForAudio.generateSample(this.trainSpeed, sampleRate);
                 soundData[i] = sample.soundSample;
                 commandData[i] = sample.commandSample;
             }
@@ -62,19 +64,20 @@ class TrainSimulator {
     update() {
         this.updateSpeed();
 
-        let soundData = new Float32Array(this.bufferSize);
-        let commandData = new Float32Array(this.bufferSize);
+        let soundData = new Float32Array(this.canvas.width);
+        let commandData = new Float32Array(this.canvas.width);
 
         for (let i = 0; i < this.bufferSize; i++) {
-            const sample = this.soundGenerator.generateSample(this.trainSpeed, this.sampleRate);
+            const sample = this.soundGeneratorForOscilloscope.generateSample(this.trainSpeed, this.sampleRate);
             soundData[i] = sample.soundSample;
             commandData[i] = sample.commandSample;
         }
+        this.soundGeneratorForOscilloscope.globalPhases = [0,0]; // reset every frame to keep the oscope generation static
 
         this.oscilloscope.sampleRate = this.sampleRate;
         this.oscilloscope.clear();
-        this.oscilloscope.drawLine(shrinkArray(soundData, this.canvas.width), "green");
-        this.oscilloscope.drawLine(shrinkArray(commandData, this.canvas.width), "red");
+        this.oscilloscope.drawLine(soundData, "green");
+        this.oscilloscope.drawLine(commandData, "red");
 
         requestAnimationFrame(() => this.update());
     }
@@ -95,25 +98,5 @@ class TrainSimulator {
     }
 }
 
-function shrinkArray(array, targetSize) {
-    if (array.length <= targetSize) {
-        return array; // No need to shrink if the array is already at or below the target size
-    }
-
-    let currentSize = array.length;
-    let n = Math.ceil(currentSize / targetSize);
-
-    let result = new Float32Array(targetSize);
-    let resultIndex = 0;
-
-    for (let i = 0; i < currentSize; i += n) {
-        if (resultIndex < targetSize) {
-            result[resultIndex] = array[i];
-            resultIndex++;
-        }
-    }
-
-    return result;
-}
 
 export default TrainSimulator;

@@ -4,10 +4,11 @@ class AudioPlayer {
         this.audioWorkletNode = null;
         this.isUserGesture = false;
         this.isPlaying = false;
-        this.bufferSize = 512; // Default buffer size
+        this.bufferSize = 1024; // Default buffer size
         this.maxQueueSize = 3; // Default max queue size
         this.sampleRate = 44100; // Default sample rate
         this.soundGenerator = null; // Will be set by the simulator
+        this.samplesQueue = []; // Queue to hold generated samples
     }
 
     async initializeAudioContext() {
@@ -33,6 +34,7 @@ class AudioPlayer {
         this.audioWorkletNode.port.onmessage = (event) => {
             if (event.data.type === 'requestSamples') {
                 const samples = this.soundGenerator(this.bufferSize, this.sampleRate);
+                this.samplesQueue.push(samples);
                 this.audioWorkletNode.port.postMessage({ type: 'samples', data: samples });
             }
         };
