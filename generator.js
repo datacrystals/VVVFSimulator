@@ -35,7 +35,7 @@ class SoundGenerator {
         const settings = this.getSettingsForSpeed(speed);
         const commandAmplitude = this.getCommandAmplitudeForSpeed(speed);
         const carrierAmplitude = 0.5;
-        const powerRail = 0.3;
+        const powerRail = 1.;
         let carrierFrequency;
 
         if (!settings) {
