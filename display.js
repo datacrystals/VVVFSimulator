@@ -170,8 +170,9 @@ class OscilloscopeDisplay {
             const color = `hsl(${index * 120}, 100%, 50%)`; // Generate a unique color for each channel
             const posY = index * (this.canvas.height / channels.length);
             const channelWidth = this.canvas.width - 2 * xMargin;
-            const channelHeight = (this.canvas.height / (channels.length)) - yMargin;
+            const channelHeight = ((this.canvas.height - yMargin*channels.length) / (channels.length)) - yMargin;
     
+
             this.drawLine(
                 this.ctx,
                 data,
