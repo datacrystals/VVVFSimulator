@@ -2,7 +2,7 @@
 import OscilloscopeDisplay from './display.js';
 import AudioPlayer from './audioPlayer.js';
 import SoundGenerator from './generator.js';
-import Speedometer from './speedometer.js';
+import VerticalLinearBar from './VerticalLinearBar.js';
 
 class TrainSimulator {
     constructor(speedDisplay, canvas, ctx) {
@@ -28,7 +28,33 @@ class TrainSimulator {
 
         // Speedometer elements
         this.speedometerCanvas = document.getElementById('speedometer');
-        this.speedometer = new Speedometer(this.speedometerCanvas);
+        this.tractiveEffortCanvas = document.getElementById('tractiveEffort');
+
+        // Speedometer and Tractive Effort Bar options
+        const speedometerOptions = {
+            verticalOffset: 75,
+            width: this.speedometerCanvas.width / 2.5,
+            height: this.speedometerCanvas.height - 75,
+            marginTop: 20,
+            maxValue: 400, // Example max speed in km/h
+            graduationStep: 25,
+            unit: 'km/h',
+            color: '#22aaff'
+        };
+
+        const tractiveEffortOptions = {
+            verticalOffset: 75,
+            width: this.tractiveEffortCanvas.width / 2.5,
+            height: this.tractiveEffortCanvas.height - 75,
+            marginTop: 20,
+            maxValue: 100, // Example max tractive effort in kN
+            graduationStep: 25,
+            unit: 'kN',
+            color: '#22aaff'
+        };
+
+        this.speedometer = new VerticalLinearBar(this.speedometerCanvas, speedometerOptions);
+        this.tractiveEffortBar = new VerticalLinearBar(this.tractiveEffortCanvas, tractiveEffortOptions);
 
         // System time variables
         this.lastUpdateTime = performance.now();
@@ -91,12 +117,6 @@ class TrainSimulator {
         }
         this.soundGeneratorForOscilloscope.globalPhases = [0, 0]; // reset every frame to keep the oscope generation static
 
-        // this.oscilloscope.sampleRate = this.sampleRate;
-        // this.oscilloscope.clear();
-        // this.oscilloscope.drawLine(soundData, "green", 0); // Output signal
-        // this.oscilloscope.drawLine(commandData, "red", this.canvas.height / 3.5); // Command signal
-        // this.oscilloscope.drawLine(carrierData, "blue", -this.canvas.height / 3.5); // Carrier signal
-
         this.oscilloscope.drawOscilloscope([
             {
                 data: commandData,
@@ -121,10 +141,17 @@ class TrainSimulator {
             }
         ], this.sampleRate);
 
-        // Draw the speedometer
-        this.speedometer.draw(this.trainSpeed, this.maxSpeed);
+        // Draw the speedometer and tractive effort bar
+        this.speedometer.draw(this.trainSpeed);
+        this.tractiveEffortBar.draw(this.calculateTractiveEffort());
 
         requestAnimationFrame(() => this.update());
+    }
+
+    calculateTractiveEffort() {
+        // Example calculation for tractive effort
+        // This should be replaced with the actual logic to calculate tractive effort based on train's state
+        return this.trainSpeed * 0.5; // Placeholder calculation
     }
 
     setPower(level) {

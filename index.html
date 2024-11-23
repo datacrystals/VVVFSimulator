@@ -11,7 +11,6 @@
     <div class="container">
         <h1>VVVF Inverter Simulator</h1>
         <div class="controls-container">
- 
             <div class="buttons-column">
                 <button id="p3" onclick="setPower(3)">P3</button>
                 <button id="p2" onclick="setPower(2)">P2</button>
@@ -23,13 +22,16 @@
                 <button id="b4" onclick="setBraking(4)">B4</button>
                 <button id="b5" onclick="setBraking(5)">B5</button>
             </div>
-
+            
             <div class="speedometer-container">
                 <canvas id="speedometer" width="60" height="600"></canvas>
             </div>
 
-            <canvas id="oscilloscope" width="1200" height="600"></canvas>
+            <div class="speedometer-container">
+                <canvas id="tractiveEffort" width="60" height="600"></canvas>
+            </div>
 
+            <canvas id="oscilloscope" width="1200" height="600"></canvas>
         </div>
         <div class="volume-slider">
             <label for="volumeSlider">Volume:</label>

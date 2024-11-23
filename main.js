@@ -1,6 +1,7 @@
 // main.js
 import TrainSimulator from './simulator.js';
 import TrainControls from './controls.js';
+import VerticalLinearBar from './VerticalLinearBar.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const speedDisplay = document.getElementById('speed');
@@ -116,4 +117,98 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.addEventListener('click', initializeAudio, { once: true });
     document.addEventListener('keypress', initializeAudio, { once: true });
+
+    // Speedometer and Tractive Effort
+    const speedometerCanvas = document.getElementById('speedometer');
+    const tractiveEffortCanvas = document.getElementById('tractiveEffort');
+
+    const speedometerOptions = {
+        verticalOffset: 75,
+        width: speedometerCanvas.width / 2.5,
+        height: speedometerCanvas.height - 75,
+        marginTop: 20,
+        maxValue: 400, // Example max speed in km/h
+        graduationStep: 25,
+        unit: 'km/h',
+        color: '#22aaff',
+        centered: false,
+        positiveOnly: true
+    };
+
+    const tractiveEffortOptions = {
+        verticalOffset: 75,
+        width: tractiveEffortCanvas.width / 2.5,
+        height: tractiveEffortCanvas.height - 75,
+        marginTop: 20,
+        maxValue: 100, // Example max tractive effort in kN
+        graduationStep: 25,
+        unit: 'kN',
+        color: '#22aaff',
+        centered: true,
+        positiveOnly: false
+    };
+
+    const speedometer = new VerticalLinearBar(speedometerCanvas, speedometerOptions);
+    const tractiveEffortBar = new VerticalLinearBar(tractiveEffortCanvas, tractiveEffortOptions);
+
+    simulator.speedometer = speedometer;
+    simulator.tractiveEffortBar = tractiveEffortBar;
+
+    // Example tractive effort value (this should be updated dynamically based on the train's state)
+    let tractiveEffort = 0;
+    const maxTractiveEffort = 100; // Example max tractive effort in kN
+
+    // Update the speedometer and tractive effort bar
+    simulator.update = function() {
+        this.updateSpeed();
+
+        const bufferSize = this.oscilloscope.getWidth();
+        let soundData = new Float32Array(bufferSize);
+        let commandData = new Float32Array(bufferSize);
+        let carrierData = new Float32Array(bufferSize);
+
+        for (let i = 0; i < bufferSize; i++) {
+            const sample = this.soundGeneratorForOscilloscope.generateSample(this.trainSpeed, this.sampleRate);
+            soundData[i] = sample.soundSample;
+            commandData[i] = sample.commandSample;
+            carrierData[i] = sample.carrierSample;
+        }
+        this.soundGeneratorForOscilloscope.globalPhases = [0, 0]; // reset every frame to keep the oscope generation static
+
+        this.oscilloscope.drawOscilloscope([
+            {
+                data: commandData,
+                label: "Command Signal",
+                yMin: -1.1,
+                yMax: 1.1,
+                numXTicks: 25
+            },
+            {
+                data: soundData,
+                label: "Inverter Output",
+                yMin: -1.1,
+                yMax: 1.1,
+                numXTicks: 25
+            },
+            {
+                data: carrierData,
+                label: "Carrier Signal",
+                yMin: -0.1,
+                yMax: 1.1,
+                numXTicks: 25
+            }
+        ], this.sampleRate);
+
+        // Draw the speedometer and tractive effort bar
+        this.speedometer.draw(this.trainSpeed);
+        this.tractiveEffortBar.draw(this.calculateTractiveEffort());
+
+        requestAnimationFrame(() => this.update());
+    };
+
+    simulator.calculateTractiveEffort = function() {
+        // Example calculation for tractive effort
+        // This should be replaced with the actual logic to calculate tractive effort based on train's state
+        return this.trainSpeed * 0.5; // Placeholder calculation
+    };
 });
