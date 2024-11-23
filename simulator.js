@@ -103,21 +103,21 @@ class TrainSimulator {
                 label: "Command Signal",
                 yMin: -1.1,
                 yMax: 1.1,
-                numXTicks: 10
+                numXTicks: 25
             },
             {
                 data: soundData,
                 label: "Inverter Output",
                 yMin: -1.1,
                 yMax: 1.1,
-                numXTicks: 10
+                numXTicks: 25
             },
             {
                 data: carrierData,
                 label: "Carrier Signal",
                 yMin: -0.1,
                 yMax: 1.1,
-                numXTicks: 10
+                numXTicks: 25
             }
         ], this.sampleRate);
 
