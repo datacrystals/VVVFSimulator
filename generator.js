@@ -72,9 +72,9 @@ class SoundGenerator {
         this.wrapPhases();
 
         return {
-            soundSample: output * 0.5,
-            commandSample: command * 0.5,
-            carrierSample: carrier * 0.5
+            soundSample: output,
+            commandSample: command,
+            carrierSample: carrier
         };
     }
 
