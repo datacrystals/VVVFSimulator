@@ -84,7 +84,7 @@ class TrainSimulator {
             height: tractiveEffortCanvas.height - 75,
             marginTop: 20,
             maxValue: 100, // Example max tractive effort in kN
-            unit: 'TE',
+            unit: '%TE',
             color: '#22aaff',
             centered: true,
             positiveOnly: false
