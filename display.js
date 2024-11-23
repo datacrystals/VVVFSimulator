@@ -16,9 +16,9 @@ class OscilloscopeDisplay {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    drawLine(ctx, data, sampleRate, posX, posY, width, height, lineColor, gridColor, borderColor, font = '12px Arial') {
+    drawLine(ctx, data, sampleRate, posX, posY, width, height, lineColor, gridColor, borderColor, font = '12px Arial', yMin = undefined, yMax = undefined, label = '', numXTicks = 5) {
         // Save the current canvas state
-        // ctx.save();
+        ctx.save();
     
         // Clear the specified plotting area
         ctx.clearRect(posX, posY, width, height);
@@ -31,8 +31,8 @@ class OscilloscopeDisplay {
         const numSamples = data.length;
         const totalTime = (numSamples - 1) / sampleRate; // Total time in seconds
         const xScale = width / totalTime; // Pixels per second
-        const yMin = Math.min(...data);
-        const yMax = Math.max(...data);
+        yMin = yMin !== undefined ? yMin : Math.min(...data);
+        yMax = yMax !== undefined ? yMax : Math.max(...data);
         const yRange = yMax - yMin;
         const yScale = height / yRange; // Pixels per unit amplitude
     
@@ -46,8 +46,9 @@ class OscilloscopeDisplay {
         ctx.stroke();
     
         // Draw x-axis ticks and labels
-        const tickIntervalX = totalTime / 5; // 5 ticks
-        for (let i = 0; i <= 5; i++) {
+        numXTicks = numXTicks < 2 ? 2 : numXTicks;
+        const tickIntervalX = totalTime / (numXTicks - 1);
+        for (let i = 0; i < numXTicks; i++) {
             const time = i * tickIntervalX;
             const x = posX + time * xScale;
             // Draw tick
@@ -83,7 +84,7 @@ class OscilloscopeDisplay {
     
         // Draw grid lines
         // Vertical grid lines
-        for (let i = 0; i <= 5; i++) {
+        for (let i = 0; i < numXTicks; i++) {
             const time = i * tickIntervalX;
             const x = posX + time * xScale;
             ctx.beginPath();
@@ -122,34 +123,47 @@ class OscilloscopeDisplay {
     
         ctx.stroke();
     
+        // Draw label
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'bottom';
+        ctx.fillStyle = 'white';
+        ctx.font = font;
+        ctx.fillText(label, posX + width - 10, posY + height - 10);
+    
         // Restore the canvas state
         ctx.restore();
     }
 
 
     drawOscilloscope(channels, sampleRate) {
-        let xMargin = 30;
-
+        let xMargin = 25;
+    
         this.sampleRate = sampleRate;
         this.clear();
-
-        channels.forEach((points, index) => {
+    
+        channels.forEach((channel, index) => {
+            const { data, label, yMin, yMax, numXTicks } = channel;
             const color = `hsl(${index * 120}, 100%, 50%)`; // Generate a unique color for each channel
-            const offsetY = (index) * (this.canvas.height / 3); // Shift each signal vertically
+            const posY = index * (this.canvas.height / channels.length);
             const channelWidth = this.canvas.width - 2 * xMargin;
-            const channelHeight = this.canvas.height / 4;
-
+            const channelHeight = this.canvas.height / (channels.length + 1);
+    
             this.drawLine(
                 this.ctx,
-                points,
+                data,
                 sampleRate,
                 xMargin,
-                offsetY + xMargin,
+                posY + xMargin,
                 channelWidth,
                 channelHeight,
                 color,
                 this.gridColor,
-                this.borderColor
+                this.borderColor,
+                '12px Arial',
+                yMin,
+                yMax,
+                label,
+                numXTicks || 5
             );
         });
     }

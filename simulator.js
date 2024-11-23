@@ -97,7 +97,29 @@ class TrainSimulator {
         // this.oscilloscope.drawLine(commandData, "red", this.canvas.height / 3.5); // Command signal
         // this.oscilloscope.drawLine(carrierData, "blue", -this.canvas.height / 3.5); // Carrier signal
 
-        this.oscilloscope.drawOscilloscope([commandData, soundData, carrierData], this.sampleRate);
+        this.oscilloscope.drawOscilloscope([
+            {
+                data: commandData,
+                label: "Command Signal",
+                yMin: -1.1,
+                yMax: 1.1,
+                numXTicks: 10
+            },
+            {
+                data: soundData,
+                label: "Inverter Output",
+                yMin: -1.1,
+                yMax: 1.1,
+                numXTicks: 10
+            },
+            {
+                data: carrierData,
+                label: "Carrier Signal",
+                yMin: -0.1,
+                yMax: 1.1,
+                numXTicks: 10
+            }
+        ], this.sampleRate);
 
         // Draw the speedometer
         this.speedometer.draw(this.trainSpeed, this.maxSpeed);
