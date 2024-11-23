@@ -1,9 +1,10 @@
 // VerticalLinearBar.js
 class VerticalLinearBar {
-    constructor(canvas, options) {
+    constructor(canvas, options, config) {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d');
         this.options = options;
+        this.config = config;
     }
 
     clear() {
@@ -29,16 +30,17 @@ class VerticalLinearBar {
         } else if (centered) {
             barHeight = (Math.abs(value) / maxValue) * (height - marginTop) / 2;
             this.ctx.fillStyle = value >= 0 ? color : '#8b4513'; // Blue for positive, brown for negative
-            this.ctx.fillRect(0, height / 2 - (value >= 0 ? 0 : barHeight), width, barHeight * 2);
+            this.ctx.fillRect(0, height / 2 - (value <= 0 ? 0 : barHeight), width, barHeight);
         } else {
             barHeight = (Math.abs(value) / maxValue) * (height - marginTop) / 2;
             this.ctx.fillStyle = value >= 0 ? color : '#8b4513'; // Blue for positive, brown for negative
-            this.ctx.fillRect(0, height / 2 - (value >= 0 ? 0 : barHeight), width, barHeight * 2);
+            this.ctx.fillRect(0, height / 2 - (value <= 0 ? 0 : barHeight), width, barHeight);
         }
     }
 
     drawGraduations() {
-        const { verticalOffset, width, height, marginTop, maxValue, graduationStep, unit, centered, positiveOnly } = this.options;
+        const { verticalOffset, width, height, marginTop, maxValue, unit, centered, positiveOnly } = this.options;
+        const { graduationStep } = this.config;
         this.ctx.strokeStyle = '#ffffff';
         this.ctx.lineWidth = 1;
 

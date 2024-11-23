@@ -166,11 +166,6 @@ canvas {
     box-shadow: 0 0 5px #ff0000;
 }
 
-#speedometer {
-    width: 50px;
-    height: 600px;
-    border-radius: 0; /* Square corners */
-}
 
 .volume-slider {
     margin-top: 20px;

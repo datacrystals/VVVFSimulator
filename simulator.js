@@ -26,38 +26,12 @@ class TrainSimulator {
         this.soundGeneratorForAudio = null; // Separate instance for audio
         this.soundGeneratorForOscilloscope = null; // Separate instance for oscilloscope
 
-        // Speedometer elements
-        this.speedometerCanvas = document.getElementById('speedometer');
-        this.tractiveEffortCanvas = document.getElementById('tractiveEffort');
-
-        // Speedometer and Tractive Effort Bar options
-        const speedometerOptions = {
-            verticalOffset: 75,
-            width: this.speedometerCanvas.width / 2.5,
-            height: this.speedometerCanvas.height - 75,
-            marginTop: 20,
-            maxValue: 400, // Example max speed in km/h
-            graduationStep: 25,
-            unit: 'km/h',
-            color: '#22aaff'
-        };
-
-        const tractiveEffortOptions = {
-            verticalOffset: 75,
-            width: this.tractiveEffortCanvas.width / 2.5,
-            height: this.tractiveEffortCanvas.height - 75,
-            marginTop: 20,
-            maxValue: 100, // Example max tractive effort in kN
-            graduationStep: 25,
-            unit: 'kN',
-            color: '#22aaff'
-        };
-
-        this.speedometer = new VerticalLinearBar(this.speedometerCanvas, speedometerOptions);
-        this.tractiveEffortBar = new VerticalLinearBar(this.tractiveEffortCanvas, tractiveEffortOptions);
-
         // System time variables
         this.lastUpdateTime = performance.now();
+
+        // Speedometer and Tractive Effort Bar
+        this.speedometer = null;
+        this.tractiveEffortBar = null;
     }
 
     async loadConfig(configPath) {
@@ -82,6 +56,50 @@ class TrainSimulator {
                 return this.soundGeneratorForAudio.generateSample(this.trainSpeed, this.sampleRate).soundSample;
             }
         });
+
+
+        // Initialize or update the speedometer and tractive effort bar
+        this.initializeBars();
+    }
+
+    initializeBars() {
+        const speedometerCanvas = document.getElementById('speedometer');
+        const tractiveEffortCanvas = document.getElementById('tractiveEffort');
+
+        const speedometerOptions = {
+            verticalOffset: 75,
+            width: speedometerCanvas.width / 2.5,
+            height: speedometerCanvas.height - 75,
+            marginTop: 20,
+            maxValue: this.maxSpeed, // Use the loaded max speed
+            unit: 'km/h',
+            color: '#22aaff',
+            centered: false,
+            positiveOnly: true
+        };
+
+        const tractiveEffortOptions = {
+            verticalOffset: 75,
+            width: tractiveEffortCanvas.width / 2.5,
+            height: tractiveEffortCanvas.height - 75,
+            marginTop: 20,
+            maxValue: 100, // Example max tractive effort in kN
+            unit: 'kN',
+            color: '#22aaff',
+            centered: true,
+            positiveOnly: false
+        };
+
+        const speedometerConfig = {
+            graduationStep: this.maxSpeed / 10 // Adjust based on max speed
+        };
+
+        const tractiveEffortConfig = {
+            graduationStep: 25 // Example graduation step for tractive effort
+        };
+
+        this.speedometer = new VerticalLinearBar(speedometerCanvas, speedometerOptions, speedometerConfig);
+        this.tractiveEffortBar = new VerticalLinearBar(tractiveEffortCanvas, tractiveEffortOptions, tractiveEffortConfig);
     }
 
     updateSpeed() {
@@ -151,7 +169,13 @@ class TrainSimulator {
     calculateTractiveEffort() {
         // Example calculation for tractive effort
         // This should be replaced with the actual logic to calculate tractive effort based on train's state
-        return this.trainSpeed * 0.5; // Placeholder calculation
+        if (this.brakingLevel > 0) {
+            return -this.brakingLevel * 20;
+        }
+        else if (this.powerLevel > 0) {
+            return this.powerLevel * (100/3);
+        }
+        return 0.;
     }
 
     setPower(level) {
