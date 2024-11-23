@@ -25,11 +25,12 @@ class OscilloscopeDisplay {
         const xLabelHeight = 20; // Height of x-axis labels
         const yLabelWidth = 40; // Width of y-axis labels
         const textMargin = 10; // Margin around text labels
+        const xAxisPadding = 20; // Additional padding on the right side of the x-axis
     
         // Adjust the plotting area to accommodate labels and margins
         const plotPosX = posX + yLabelWidth + textMargin;
         const plotPosY = posY + textMargin;
-        const plotWidth = width - yLabelWidth - 2 * textMargin;
+        const plotWidth = width - yLabelWidth - 2 * textMargin - xAxisPadding;
         const plotHeight = height - xLabelHeight - 2 * textMargin;
     
         // Clear the specified plotting area
@@ -135,7 +136,6 @@ class OscilloscopeDisplay {
     
         ctx.stroke();
     
-
         // Draw label
         ctx.textAlign = 'right';
         ctx.textBaseline = 'top';
@@ -153,7 +153,6 @@ class OscilloscopeDisplay {
         // Draw the label text
         ctx.fillStyle = 'yellow';
         ctx.fillText(label, labelPosX, labelPosY + 2);
-    
     
         // Restore the canvas state
         ctx.restore();
