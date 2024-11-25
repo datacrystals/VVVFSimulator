@@ -10,7 +10,40 @@ class SoundGenerator {
     }
 
     getCommandAmplitudeForSpeed(speed) {
-        return 1;
+        const settings = this.getSettingsForSpeed(speed);
+        if (!settings || !settings.spwm.amplitudeModifiers) {
+            return 1; // Default amplitude if no modifiers are specified
+        }
+        return this.applyAmplitudeModifiers(settings.spwm.amplitudeModifiers, speed, settings);
+    }
+
+    applyAmplitudeModifiers(modifiers, speed, settings) {
+        let amplitude = 1; // Default amplitude
+        for (const modifier of modifiers) {
+            switch (modifier.type) {
+                case 'constant':
+                    amplitude = this.applyConstantAmplitude(modifier.value);
+                    break;
+                case 'ramp':
+                    amplitude = this.applyRampAmplitude(modifier, speed, settings);
+                    break;
+                // Add more cases for other types of modifiers as needed
+                default:
+                    console.warn(`Unknown amplitude modifier type: ${modifier.type}`);
+            }
+        }
+        return amplitude;
+    }
+
+    applyConstantAmplitude(value) {
+        // Template function for constant amplitude
+        return value;
+    }
+
+    applyRampAmplitude(modifier, speed, settings) {
+        // Template function for ramp amplitude
+        const ratio = (speed - settings.minSpeed) / (settings.maxSpeed - settings.minSpeed);
+        return modifier.startValue + (modifier.endValue - modifier.startValue) * ratio;
     }
 
     getSettingsForSpeed(speed) {
@@ -35,7 +68,9 @@ class SoundGenerator {
         const settings = this.getSettingsForSpeed(speed);
         const commandAmplitude = this.getCommandAmplitudeForSpeed(speed);
         const carrierAmplitude = 0.5;
-        const powerRail = 1.;
+        const powerRail = 1. * (0.25 + commandAmplitude*3/4);
+        let carrierOffsetPhase = 0;
+
         let carrierFrequency;
 
         if (!settings) {
@@ -45,15 +80,19 @@ class SoundGenerator {
                 carrierSample: 0
             };
         }
+
         if (settings.spwm.type === 'fixed') {
             carrierFrequency = settings.spwm.carrierFrequency;
         } else if (settings.spwm.type === 'ramp') {
             const ratio = (speed - settings.minSpeed) / (settings.maxSpeed - settings.minSpeed);
             carrierFrequency = settings.spwm.minCarrierFrequency + (settings.spwm.maxCarrierFrequency - settings.spwm.minCarrierFrequency) * ratio;
+        } else if (settings.spwm.type === 'sync') {
+            const pulseMode = settings.spwm.pulseMode;
+            carrierFrequency = pulseMode * commandFrequency;
         }
 
         const carrierFactor = (2 * Math.PI / sampleRate) * carrierFrequency;
-        const carrier = ((this.globalPhases[0] + carrierFactor) % Math.PI) / Math.PI; // Sawtooth wave with period π
+        const carrier = ((this.globalPhases[0] + carrierFactor + carrierOffsetPhase) % Math.PI) / Math.PI; // Sawtooth wave with period π
         this.globalPhases[0] += carrierFactor;
 
         const commandFactor = (2 * Math.PI * commandFrequency / sampleRate);

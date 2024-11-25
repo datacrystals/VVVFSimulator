@@ -1,0 +1,103 @@
+{
+    "name": "Generic GTO Inverter",
+    "manufacturer": "generic",
+    "date": "2024-11-21",
+    "description": "A generic GTO inverter.",
+    "maxAcceleration_kmh_s": "2",
+    "maxBrakingAcceleration_kmh_s": "4",
+    "maxSpeed_kmh": 200,
+    "accelerationRampCurve": {
+        "type": "sigmoid",
+        "parameters": {
+            "midpoint": 50,
+            "steepness": 0.1
+        }
+    },
+    "brakingRampCurve": {
+        "type": "linear",
+        "parameters": {
+            "slope": 0.5,
+            "intercept": 0.0
+        }
+    },
+    "speedRanges": [
+        {
+            "minSpeed": -1,
+            "maxSpeed": 10,
+            "spwm": {
+                "type": "fixed",
+                "carrierFrequency": 400,
+                "amplitudeModifiers": [{
+                    "type": "ramp",
+                    "startValue": 0.1,
+                    "endValue": 1.0
+                }]
+            }
+        },
+        {
+            "minSpeed": 10,
+            "maxSpeed": 25,
+            "spwm": {
+                "type": "fixed",
+                "carrierFrequency": 800,
+                "amplitudeModifiers": []
+            }
+        },
+        {
+            "minSpeed": 25,
+            "maxSpeed": 50,
+            "spwm": {
+                "type": "sync",
+                "modulation": "sync",
+                "pulseMode": 27,
+                "amplitudeModifiers": []
+            }
+        },
+        {
+            "minSpeed": 50,
+            "maxSpeed": 80,
+            "spwm": {
+                "type": "sync",
+                "modulation": "sync",
+                "pulseMode": 21,
+                "amplitudeModifiers": []
+            }
+        },
+        {
+            "minSpeed": 80,
+            "maxSpeed": 100,
+            "spwm": {
+                "type": "sync",
+                "pulseMode": 15,
+                "amplitudeModifiers": []
+            }
+        },
+        {
+            "minSpeed": 100,
+            "maxSpeed": 125,
+            "spwm": {
+                "type": "sync",
+                "pulseMode": 9,
+                "amplitudeModifiers": []
+            }
+        },
+        {
+            "minSpeed": 125,
+            "maxSpeed": 160,
+            "spwm": {
+                "type": "sync",
+                "pulseMode": 3,
+                "amplitudeModifiers": []
+            }
+        },
+        {
+            "minSpeed": 160,
+            "maxSpeed": 201,
+            "spwm": {
+                "type": "sync",
+                "pulseMode": 1,
+                "amplitudeModifiers": []
+            }
+        }
+    ]
+}

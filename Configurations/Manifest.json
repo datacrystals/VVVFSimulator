@@ -3,6 +3,7 @@
     "configs": [
         "Generic_IGBT.json",
         "Generic_GTO.json",
-        "TGV_TMST.json"
+        "TGV_TMST.json",
+        "Test.json"
     ]
 }
