@@ -70,8 +70,9 @@ class SoundGenerator {
         const carrierAmplitude = 0.5;
         const powerRail = 1. * (0.25 + commandAmplitude*3/4);
         let carrierOffsetPhase = 0;
+        let carrierFrequency = 0;
 
-        let carrierFrequency;
+        let carrierMode = "sawtooth";
 
         if (!settings) {
             return {
@@ -89,10 +90,16 @@ class SoundGenerator {
         } else if (settings.spwm.type === 'sync') {
             const pulseMode = settings.spwm.pulseMode;
             carrierFrequency = pulseMode * commandFrequency;
+            carrierMode = "triangle";
         }
 
         const carrierFactor = (2 * Math.PI / sampleRate) * carrierFrequency;
-        const carrier = ((this.globalPhases[0] + carrierFactor + carrierOffsetPhase) % Math.PI) / Math.PI; // Sawtooth wave with period π
+        let carrier = 0;
+        if (carrierMode === "sawtooth") {
+            carrier = ((this.globalPhases[0] + carrierFactor + carrierOffsetPhase) % Math.PI) / Math.PI; // Sawtooth wave with period π
+        } else if (carrierMode === "triangle") {
+            carrier = Math.abs((((this.globalPhases[0] + carrierFactor + carrierOffsetPhase) % Math.PI) / Math.PI) * 2 - 1); // Triangle wave with period π
+        }
         this.globalPhases[0] += carrierFactor;
 
         const commandFactor = (2 * Math.PI * commandFrequency / sampleRate);
