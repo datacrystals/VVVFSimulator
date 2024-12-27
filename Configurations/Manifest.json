@@ -1,5 +1,5 @@
 {
-    "defaultConfig": "TGV_TMST.json",
+    "defaultConfig": "BART_Legacy_Fleet.json",
     "configs": [
         "Generic_IGBT.json",
         "Generic_GTO.json",
