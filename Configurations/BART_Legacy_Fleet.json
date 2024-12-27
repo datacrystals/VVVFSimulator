@@ -10,79 +10,124 @@
         {
             "minSpeed": -1,
             "maxSpeed": 5,
-            "spwm": {
-                "type": "ramp",
-                "minCarrierFrequency": 250,
-                "maxCarrierFrequency": 500,
-                "amplitudeModifiers": [{
+            "AccelerationBrakeNeutral": {
+                "spwm": {
                     "type": "ramp",
-                    "startValue": 0.5,
-                    "endValue": 1.0
-                }]
+                    "minCarrierFrequency": 250,
+                    "maxCarrierFrequency": 500,
+                    "amplitudeModifiers": [{
+                        "type": "ramp",
+                        "startValue": 0.2,
+                        "endValue": 1.0
+                    }]
+                }
             }
         },
         {
             "minSpeed": 5,
             "maxSpeed": 20,
-            "spwm": {
-                "type": "fixed",
-                "carrierFrequency": 500
+            "AccelerationBrakeNeutral": {
+                "spwm": {
+                    "type": "fixed",
+                    "carrierFrequency": 500
+                }
             }
         },
         {
             "minSpeed": 20,
             "maxSpeed": 21,
-            "spwm": {
-                "type": "ramp",
-                "minCarrierFrequency": 500,
-                "maxCarrierFrequency": 300
+            "Acceleration": {
+                "spwm": {
+                    "type": "ramp",
+                    "minCarrierFrequency": 500,
+                    "maxCarrierFrequency": 300
+                }
+            },
+            "Neutral": {
+                "spwm": {
+                    "type": "ramp",
+                    "minCarrierFrequency": 500,
+                    "maxCarrierFrequency": 300
+                }
+            },
+            "Brake": {
+                "spwm": {
+                    "type": "fixed",
+                    "carrierFrequency": 500
+                }
             }
         },
         {
             "minSpeed": 21,
             "maxSpeed": 27,
-            "spwm": {
-                "type": "sync",
-                "pulseMode": 11,
-                "comment": "Note that this should be shepwm but i dont have it yet"
+            "AccelerationBrakeNeutral": {
+                "spwm": {
+                    "type": "sync",
+                    "pulseMode": 11,
+                    "comment": "Note that this should be shepwm but i dont have it yet"
+                }
             }
         },
         {
             "minSpeed": 27,
             "maxSpeed": 40,
-            "spwm": {
-                "type": "sync",
-                "pulseMode": 7,
-                "comment": "Note that this should be shepwm but i dont have it yet, it should say sync.she or somethin"
+            "AccelerationBrakeNeutral": {
+                "spwm": {
+                    "type": "sync",
+                    "pulseMode": 7,
+                    "comment": "Note that this should be shepwm but i dont have it yet, it should say sync.she or somethin"
+                }
             }
         },
         {
             "minSpeed": 40,
             "maxSpeed": 48,
-            "spwm": {
-                "type": "sync",
-                "pulseMode": 3,
-                "widePulse": false
+            "AccelerationBrakeNeutral": {
+                "spwm": {
+                    "type": "sync",
+                    "pulseMode": 3,
+                    "widePulse": false
+                }
             }
         },
         {
             "minSpeed": 48,
             "maxSpeed": 55,
-            "spwm": {
-                "type": "sync",
-                "pulseMode": 3,
-                "widePulse": true,
-                "modulationIndex": 1.1,
-                "comment": "W3P Mode"
-              }
+            "AccelerationBrakeNeutral": {
+                "spwm": {
+                    "type": "sync",
+                    "pulseMode": 3,
+                    "widePulse": true,
+                    "modulationIndex": 1.1,
+                    "comment": "W3P Mode"
+                }
+            }
         },
         {
             "minSpeed": 55,
             "maxSpeed": 150,
-            "spwm": {
-                "type": "sync",
-                "pulseMode": 1,
-                "widePulse": false
+            "Acceleration": {
+                "spwm": {
+                    "type": "sync",
+                    "pulseMode": 1,
+                    "widePulse": false
+                }
+            },
+            "Neutral": {
+                "spwm": {
+                    "type": "sync",
+                    "pulseMode": 3,
+                    "widePulse": true,
+                    "modulationIndex": 1.15,
+                    "comment": "W3P Mode"
+                }
+            },
+            "Brake": {
+                "spwm": {
+                    "type": "sync",
+                    "pulseMode": 1,
+                    "widePulse": false
+                }
             }
         }
     ]

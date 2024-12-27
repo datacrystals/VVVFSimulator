@@ -47,8 +47,8 @@ class TrainSimulator {
         // this.spwmConfig = config.speedRanges;
         this.maxAcceleration = parseFloat(config.maxAcceleration_kmh_s);
         this.maxSpeed = config.maxSpeed_kmh;
-        this.soundGeneratorForAudio = new SoundGenerator(config);
-        this.soundGeneratorForOscilloscope = new SoundGenerator(config);
+        this.soundGeneratorForAudio = new SoundGenerator(config, this.sampleRate);
+        this.soundGeneratorForOscilloscope = new SoundGenerator(config, this.sampleRate);
 
         // Set the sound generator for audio
         this.audioPlayer.setGenerator({
