@@ -1,3 +1,22 @@
+
+function raiseAndNormalize(inputValue, exponent) {
+    // Step 1: Determine the sign of the input value
+    const sign = Math.sign(inputValue);
+    
+    // Step 2: Take the absolute value
+    const absValue = Math.abs(inputValue);
+    
+    // Step 3: Raise it to the exponent
+    const poweredAbsValue = Math.pow(absValue, exponent);
+    
+    // Step 4: Normalize back to -1 to 1
+    const normalizedValue = (poweredAbsValue * 2) - 1;
+    
+    // Step 5: Restore the original sign
+    return normalizedValue * sign;
+  }
+
+
 class SoundGenerator {
     constructor(config) {
         this.config = config;
@@ -64,11 +83,11 @@ class SoundGenerator {
             };
         }
 
-        const commandFrequency = this.getCommandFrequencyForSpeed(speed);
+        let commandFrequency = this.getCommandFrequencyForSpeed(speed);
         const settings = this.getSettingsForSpeed(speed);
         const commandAmplitude = this.getCommandAmplitudeForSpeed(speed);
         const carrierAmplitude = 0.5;
-        const powerRail = 1. * (0.25 + commandAmplitude*3/4);
+        const powerRail = 1. * (commandAmplitude);
         let carrierOffsetPhase = 0;
         let carrierFrequency = 0;
 
@@ -91,8 +110,7 @@ class SoundGenerator {
             const pulseMode = settings.spwm.pulseMode;
             carrierFrequency = pulseMode * commandFrequency;
             carrierMode = "triangle";
-        }
-
+          }
         const carrierFactor = (2 * Math.PI / sampleRate) * carrierFrequency;
         let carrier = 0;
         if (carrierMode === "sawtooth") {
@@ -103,7 +121,13 @@ class SoundGenerator {
         this.globalPhases[0] += carrierFactor;
 
         const commandFactor = (2 * Math.PI * commandFrequency / sampleRate);
-        const command = Math.sin(this.globalPhases[1] + commandFactor) * commandAmplitude;
+        let command = Math.sin(this.globalPhases[1] + commandFactor) * commandAmplitude;
+               
+        // For wide pulse mode, we just exagerate the command request a bit to make it wider pulses
+        if (settings.spwm.widePulse) {
+            command = command*settings.spwm.modulationIndex;
+        }
+
         this.globalPhases[1] += commandFactor;
 
         let output;

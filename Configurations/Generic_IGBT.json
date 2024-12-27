@@ -11,7 +11,7 @@
             "maxSpeed": 75,
             "spwm": {
                 "type": "fixed",
-                "carrierFrequency": 1500
+                "carrierFrequency": 2000
             }
         },
         {
