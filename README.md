@@ -1,7 +1,3 @@
-Here’s a **README.md** file for the entire project. This document provides an overview of the project, how to set it up, and how to use it.
-
----
-
 # Train Sound Simulator
 
 The **Train Sound Simulator** is a JavaScript-based project that simulates the sound of a train based on its speed, acceleration, and braking. It uses a configurable JSON file to define the behavior of the sound generator at different speed ranges and modes (Acceleration, Brake, Neutral). The project is designed to be modular, extensible, and easy to customize.
