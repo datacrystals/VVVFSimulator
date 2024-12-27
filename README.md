@@ -1,17 +1,20 @@
-# Train Sound Simulator
+# Train Inverter Sound Simulator
 
-The **Train Sound Simulator** is a JavaScript-based project that simulates the sound of a train based on its speed, acceleration, and braking. It uses a configurable JSON file to define the behavior of the sound generator at different speed ranges and modes (Acceleration, Brake, Neutral). The project is designed to be modular, extensible, and easy to customize.
+The **Train Inverter Sound Simulator** is a JavaScript-based project that simulates the sound of a train's inverter based on its speed, acceleration, and braking. It uses a configurable JSON file to define the behavior of the sound generator at different speed ranges and modes (Acceleration, Brake, Neutral). The project is designed to be modular, extensible, and easy to customize.
+
+In the future, this project will support **VESC (Vedder Electronic Speed Controller)** with firmware 6.05+, allowing configurations created here to be pushed onto a VESC. This will enable Personal Electric Vehicles (PEVs) to generate sounds like VVVF (Variable Voltage Variable Frequency) inverters based on the configurations defined in this software. **Note: VESC support is not yet implemented but is planned for a future release.**
 
 ---
 
 ## Features
 
-- **Configurable Sound Generation**: Define different sound behaviors for various speed ranges and modes (Acceleration, Brake, Neutral).
-- **SPWM (Sinusoidal Pulse Width Modulation)**: Supports fixed, ramp, and sync SPWM types for realistic sound generation.
+- **Configurable Inverter Sound Generation**: Define different sound behaviors for various speed ranges and modes (Acceleration, Brake, Neutral).
+- **SPWM (Sinusoidal Pulse Width Modulation)**: Supports fixed, ramp, and sync SPWM types for realistic inverter sound generation.
 - **Amplitude Modifiers**: Adjust the amplitude of the sound signal using constant or ramp modifiers.
-- **Real-Time Simulation**: Simulates train sounds in real-time based on speed changes.
+- **Real-Time Simulation**: Simulates inverter sounds in real-time based on speed changes.
 - **Oscilloscope Visualization**: Visualize the sound, command, and carrier signals using an oscilloscope display.
 - **Speedometer and Tractive Effort Bar**: Display the train's speed and tractive effort in real-time.
+- **Future VESC Support**: Configurations created in this software will be compatible with VESC firmware 6.05+, enabling PEVs to generate VVVF inverter sounds based on these configurations. (**Not yet implemented**)
 
 ---
 
@@ -113,6 +116,17 @@ The behavior of the sound generator is defined in JSON configuration files. Each
 - **Visualization**: Modify `display.js` to change how the oscilloscope and other visual elements are rendered.
 
 ---
+
+
+## Future VESC Support
+
+In the future, this project will support **VESC (Vedder Electronic Speed Controller)** with firmware 6.05+. This will allow configurations created in this software to be pushed onto a VESC, enabling Personal Electric Vehicles (PEVs) to generate sounds like VVVF inverters based on the configurations defined here. **Note: VESC support is not yet implemented but is planned for a future release.**
+
+---
+
+## Call for Contributions
+
+We welcome contributions for especially **new traction inverter configurations** (but all contributions are welcome)! If you have configurations for other trains or traction inverters, please submit a pull request (PR) with your JSON configuration files. Your contributions will help expand the library of available sounds and make this project more versatile.
 
 ## Contributing
 
