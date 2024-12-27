@@ -140,4 +140,4 @@ This project is licensed under the AGPLV3 License. See the [LICENSE](LICENSE.md)
 
 ## Contact
 
-For questions or feedback, please contact [Thomas Liao](thomas.liao13@gmail.com).
+For questions or feedback, please send an email [here](https://tliao.net/Contact/Contact/).
