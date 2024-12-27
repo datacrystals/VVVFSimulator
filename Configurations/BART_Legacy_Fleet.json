@@ -3,7 +3,8 @@
     "manufacturer": "ADTRANZ",
     "date": "2024-12-27",
     "description": "",
-    "maxAcceleration_kmh_s": "4",
+    "maxAcceleration_kmh_s": "3",
+    "motorGearRatio": 1,
     "maxSpeed_kmh": 130,
     "speedRanges": [
         {

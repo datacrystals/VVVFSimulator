@@ -44,11 +44,11 @@ class TrainSimulator {
         const cacheBust = `?t=${new Date().getTime()}`;
         const response = await fetch(configPath + cacheBust);
         const config = await response.json();
-        this.spwmConfig = config.speedRanges;
+        // this.spwmConfig = config.speedRanges;
         this.maxAcceleration = parseFloat(config.maxAcceleration_kmh_s);
         this.maxSpeed = config.maxSpeed_kmh;
-        this.soundGeneratorForAudio = new SoundGenerator(this.spwmConfig);
-        this.soundGeneratorForOscilloscope = new SoundGenerator(this.spwmConfig);
+        this.soundGeneratorForAudio = new SoundGenerator(config);
+        this.soundGeneratorForOscilloscope = new SoundGenerator(config);
 
         // Set the sound generator for audio
         this.audioPlayer.setGenerator({

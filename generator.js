@@ -19,7 +19,8 @@ function raiseAndNormalize(inputValue, exponent) {
 
 class SoundGenerator {
     constructor(config) {
-        this.config = config;
+        this.config = config.speedRanges;
+        this.fullConfig = config;
         let numControlFrequencies = 2;
         this.globalPhases = new Array(numControlFrequencies).fill(0);
     }
@@ -83,11 +84,13 @@ class SoundGenerator {
             };
         }
 
-        let commandFrequency = this.getCommandFrequencyForSpeed(speed);
         const settings = this.getSettingsForSpeed(speed);
+
+        let gearRatioMultiplier = this.fullConfig.motorGearRatio;
+        let commandFrequency = this.getCommandFrequencyForSpeed(speed / gearRatioMultiplier);
         const commandAmplitude = this.getCommandAmplitudeForSpeed(speed);
         const carrierAmplitude = 0.5;
-        const powerRail = 1. * (commandAmplitude);
+        const powerRail = commandAmplitude;
         let carrierOffsetPhase = 0;
         let carrierFrequency = 0;
 

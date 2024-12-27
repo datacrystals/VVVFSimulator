@@ -4,6 +4,7 @@
     "date": "2024-11-21",
     "description": "A generic GTO inverter.",
     "maxAcceleration_kmh_s": "2",
+    "motorGearRatio": 1,
     "maxSpeed_kmh": 200,
     "speedRanges": [
         {

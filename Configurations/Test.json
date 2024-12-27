@@ -5,6 +5,7 @@
     "description": "A generic GTO inverter.",
     "maxAcceleration_kmh_s": "2",
     "maxBrakingAcceleration_kmh_s": "4",
+    "motorGearRatio": 1,
     "maxSpeed_kmh": 200,
     "accelerationRampCurve": {
         "type": "sigmoid",
