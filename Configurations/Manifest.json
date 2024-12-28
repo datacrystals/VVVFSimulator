@@ -5,6 +5,7 @@
         "Generic_GTO.json",
         "TGV_TMST.json",
         "BART_Legacy_Fleet.json",
+        "Test_RSPWM.json",
         "Test.json"
     ]
 }

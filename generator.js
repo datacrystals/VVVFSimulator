@@ -186,16 +186,26 @@ class SoundGenerator {
             };
         }
 
+        // -- HANDLERS FOR PWM Types -- //
         if (settings.Selected.spwm.type === 'fixed') {
+            // Regular async fixed Sinewave PWM
             carrierFrequency = settings.Selected.spwm.carrierFrequency;
         } else if (settings.Selected.spwm.type === 'ramp') {
+            // Async SPWM Ramp between two frequencies over the speed range
             const ratio = (speed - settings.minSpeed) / (settings.maxSpeed - settings.minSpeed);
             carrierFrequency = settings.Selected.spwm.minCarrierFrequency + (settings.Selected.spwm.maxCarrierFrequency - settings.Selected.spwm.minCarrierFrequency) * ratio;
         } else if (settings.Selected.spwm.type === 'sync') {
+            // Synchronous SPWM at the target number of pulses
             const pulseMode = settings.Selected.spwm.pulseMode;
             carrierFrequency = pulseMode * commandFrequency;
             carrierMode = "triangle";
-          }
+        } else if (settings.Selected.spwm.type === 'rspwm') {
+            // Implement random switching between the carrier frequency 
+            let minRange = settings.Selected.spwm.minCarrierFrequency;
+            let maxRange = settings.Selected.spwm.maxCarrierFrequency;
+            carrierFrequency = Math.random() * (maxRange - minRange) + minRange;
+        }
+
         const carrierFactor = (2 * Math.PI / sampleRate) * carrierFrequency;
         let carrier = 0;
         if (carrierMode === "sawtooth") {

@@ -1,0 +1,29 @@
+{
+    "name": "Generic RSPWM SiC Inverter",
+    "manufacturer": "generic",
+    "date": "2024-12-28",
+    "description": "A test inverter.",
+    "maxAcceleration_kmh_s": "2",
+    "motorGearRatio": 1,
+    "maxSpeed_kmh": 100,
+    "speedRanges": [
+        {
+            "minSpeed": 0,
+            "maxSpeed": 20,
+            "spwm": {
+                "type": "rspwm",
+                "minCarrierFrequency": 1000,
+                "maxCarrierFrequency": 3000
+            }
+        },
+        {
+            "minSpeed": 20,
+            "maxSpeed": 100,
+            "spwm": {
+                "type": "ramp",
+                "minCarrierFrequency": 1000,
+                "maxCarrierFrequency": 2000
+            }
+        }
+    ]
+}
