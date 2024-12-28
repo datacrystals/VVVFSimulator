@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#speedometerCanvas {
+    border: 1px solid #000;
+    margin: 20px auto;
+}
+
+#modeDisplay {
+    font-size: 1.5em;
+    margin-top: 20px;
+}
+
+#instructions {
+    font-size: 1.2em;
+    color: gray;
+}
